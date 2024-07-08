@@ -16,7 +16,7 @@ export const EmailTitle = styled.h1`
     font-size: 42px;
     line-height: 130%;
     letter-spacing: 0.1px;
-    color: ${STYLE_GUIDE.color.dark};
+    color: ${STYLE_GUIDE.color.primary};
 
     margin-top: 30px;
     margin-bottom: 30px;
