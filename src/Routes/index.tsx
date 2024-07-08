@@ -1,15 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Sidebar } from '../Components/Sidebar/Sidebar.component';
+import {  Router, Routes, Route } from 'react-router-dom';
+import  {Users}  from '../Pages/Users/Users.page';
+import Email from '../Pages/Email/Email.page';
 
 const AppRouter: React.FC = () => {
     return (
-        <Router>
-            <Sidebar/>
+       
             <Routes>
-                <Route path="/" element={<div>Home</div>} />
+                <Route path="/"  element={<Users/>} />
+                <Route path="/EmailMarket"  element={<Email/>} />
             </Routes>
-        </Router>
+        
     );
 };
 
