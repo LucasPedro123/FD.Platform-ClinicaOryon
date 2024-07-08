@@ -19,7 +19,7 @@ export const Sidebar: React.FC = () => {
                         <S.SidebarText>Users</S.SidebarText>
                     </S.SidebarItem>
                 </Link>
-                <Link to='/' style={{ textDecoration: 'none' }}>
+                <Link to='/EmailMarket' style={{ textDecoration: 'none' }}>
                     <S.SidebarItem >
                         <i className="fa-regular fa-envelope" style={{ color: 'white', fontSize: '1.3em' }}></i>
                         <S.SidebarText>Email Market</S.SidebarText>
