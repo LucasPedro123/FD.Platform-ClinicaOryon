@@ -1,4 +1,3 @@
-import React from 'react';
 import AppRouter from './Routes/index'
 import { Sidebar } from './Components/Sidebar/Sidebar.component';
 
