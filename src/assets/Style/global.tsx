@@ -5,6 +5,7 @@ export const STYLE_GUIDE = {
         grayLight: '#F1F1F1',
         grayDark: '#343434',
         white: '#fff',
+        dark: '#000000'
         
     },
     fontFamily: 'Roboto'
