@@ -7,7 +7,7 @@ export const EmailContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    margin-left: 223px;
 `
 
 export const EmailTitle = styled.h1`
