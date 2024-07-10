@@ -5,7 +5,8 @@ import { collection, getDocs, query, where, Timestamp, deleteDoc, doc } from "fi
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import { deleteUser } from "firebase/auth";
 import iconUser from '../../assets/icon-user.png';
-import { Modal, Button } from 'react-bootstrap';
+import Modal from 'react-modal';
+
 
 interface User {
     email: string;
@@ -16,6 +17,9 @@ interface User {
     userId: string;
     weeklyCalories?: number; // Adicionando a propriedade para as calorias semanais
 }
+
+// Define the root element for the modal
+Modal.setAppElement('#root');
 
 export const Users: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -156,17 +160,33 @@ export const Users: React.FC = () => {
             </S.Table>
 
             {selectedUser && (
-                <Modal show={showModal} onHide={() => setShowModal(false)} style={{marginLeft: 223}}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Deseja excluir este usuário?</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>Tem certeza que deseja excluir o usuário {selectedUser.name}?</p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-                        <Button variant="danger" onClick={handleDeleteUser}>Excluir</Button>
-                    </Modal.Footer>
+                <Modal
+                    isOpen={showModal}
+                    onRequestClose={() => setShowModal(false)}
+                    contentLabel="Confirm Delete"
+                    style={{
+                        overlay: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        },
+                        content: {
+                            top: '50%',
+                            left: '50%',
+                            right: 'auto',
+                            bottom: 'auto',
+                            marginRight: '-50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '450px',
+                            height: 176,
+                            padding: '20px',
+                        },
+                    }}
+                >
+                    <S.ModalTitle>Deseja excluir este usuário?</S.ModalTitle>
+                    <S.ModalText>Tem certeza que deseja excluir o usuário {selectedUser.name}?</S.ModalText>
+                    <S.ButtonWrapper >
+                        <S.ButtonCancel  onClick={() => setShowModal(false)}>Cancelar</S.ButtonCancel>
+                        <S.ButtonConfirm  onClick={handleDeleteUser} style={{ marginLeft: '10px' }}>Excluir</S.ButtonConfirm>
+                    </S.ButtonWrapper>
                 </Modal>
             )}
         </S.UserContainer>
