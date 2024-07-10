@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { STYLE_GUIDE } from "../../assets/Style/global";
-import { IlinkProps } from './Sidebar.component'
 
 interface SidebarItemProps {
     active: boolean;
