@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { STYLE_GUIDE } from "../../assets/Style/global";
 
 export const UserContainer = styled.div`
     width: 100vw;
@@ -108,7 +109,59 @@ export const Actions = styled.td`
         cursor: pointer;
 
         &:hover {
-            color: #007BFF; // Cor ao passar o mouse
+            color: ${STYLE_GUIDE.color.secondary}; // Cor ao passar o mouse
         }
     }
 `;
+export const ModalTitle = styled.h2`
+    
+`
+
+export const ButtonCancel = styled.button`
+    border: none;
+    cursor: pointer;
+    height: 38px;
+    border-radius: 6px;
+    padding-inline: 15px;
+    color: ${STYLE_GUIDE.color.white};
+    background: #7D7D7D;
+
+    transition: 0.3s;
+
+    &:hover{
+        background: #636363;
+    }
+    
+`
+
+export const ButtonConfirm = styled.button`
+    border: none;
+    height: 38px;
+    border-radius: 6px;
+    cursor: pointer;
+    
+    background-color: ${STYLE_GUIDE.color.secondary};
+    color: ${STYLE_GUIDE.color.white};
+    padding-inline: 15px;
+    transition: 0.3s;
+
+    &:hover{
+        background: #6A5490;
+    }
+`
+
+export const ButtonWrapper = styled.div`
+    display: flex;  
+    justify-content: end;
+    gap: 12px;
+    margin-top: 20px;
+`
+
+export const ModalText = styled.p`
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    color: #323C47;
+    margin-top: 15px;
+`   
