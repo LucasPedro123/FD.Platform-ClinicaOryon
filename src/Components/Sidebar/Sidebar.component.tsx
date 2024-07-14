@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import * as S from './Sidebar.style'
 import Logo from '../../assets/logo.png'
 import { Link, useLocation } from "react-router-dom";
+import { LoggedIn } from "../../Context/LoggedIn.context";
 
 export interface IlinkProps {
     emailLink: boolean;
@@ -11,6 +12,7 @@ export interface IlinkProps {
 export const Sidebar: React.FC = () => {
     const [link, setLink] = useState<IlinkProps>({ emailLink: false, usersLink: false });
     const location = useLocation();
+    const context = useContext(LoggedIn)
 
     useEffect(() => {
         if (location.pathname === "/Users") {
@@ -45,7 +47,7 @@ export const Sidebar: React.FC = () => {
             <S.Footer>
                 <S.FooterContent href="/">
                     <i className="fa-solid fa-right-from-bracket"></i>
-                    <S.SidebarFooterText>Sair</S.SidebarFooterText>
+                    <S.SidebarFooterText onClick={()=>{context?.handleLogin(false) }}>Sair</S.SidebarFooterText>
                 </S.FooterContent>
             </S.Footer>
         </S.SidebarContainer>
