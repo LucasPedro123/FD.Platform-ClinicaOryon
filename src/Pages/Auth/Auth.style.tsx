@@ -20,7 +20,7 @@ export const AuthContainer = styled.div`
         width: 100%;
         height: 100%;
         background: rgba(217, 217, 217, 0.2);
-        backdrop-filter: blur(5.15px);
+        backdrop-filter: blur(6.15px);
     }
 `;
 
@@ -47,6 +47,7 @@ export const Form = styled.form`
 
     display: flex;
     flex-direction: column;
+    position: relative;
 `;
 
 export const Icon = styled.i`
@@ -119,8 +120,19 @@ export const Button = styled.button`
     border-radius: 30px;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 16px;
 
     &:hover{
         background-color: #6A5490;
     }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+`
+export const ErrorMessage = styled.p`
+    position: absolute;
+    bottom: 100px;
+    color: #f86969;
 `
