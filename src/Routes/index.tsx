@@ -5,6 +5,7 @@ import Email from '../Pages/Email/Email.page';
 import Auth from '../Pages/Auth/Auth.page';
 import { LoggedIn } from '../Context/LoggedIn.context';
 import {Error} from '../Pages/Error/Error.page';
+import { Database } from '../Pages/Database/Database.page';
 
 
 
@@ -17,6 +18,7 @@ const AppRouter: React.FC = () => {
             <Route path="/unauthorized" element={<Error typeError="401"/>} />
             <Route path="/Users" element={context?.loggedIn ? <Users /> :<Navigate to="/unauthorized" />} />
             <Route path="/EmailMarket" element={context?.loggedIn ? <Email /> :<Navigate to="/unauthorized" />} />
+            <Route path="/Database" element={context?.loggedIn ? <Database /> :<Navigate to="/unauthorized" />} />
             <Route path="*" element={<Error typeError="404"/>} />
         </Routes>
     );
