@@ -7,18 +7,21 @@ import { LoggedIn } from "../../Context/LoggedIn.context";
 export interface IlinkProps {
     emailLink: boolean;
     usersLink: boolean;
+    databaseLink: boolean;
 }
 
 export const Sidebar: React.FC = () => {
-    const [link, setLink] = useState<IlinkProps>({ emailLink: false, usersLink: false });
+    const [link, setLink] = useState<IlinkProps>({ emailLink: false, usersLink: false, databaseLink: false });
     const location = useLocation();
     const context = useContext(LoggedIn)
 
     useEffect(() => {
         if (location.pathname === "/Users") {
-            setLink({ emailLink: false, usersLink: true });
+            setLink({ emailLink: false, usersLink: true, databaseLink: false });
         } else if (location.pathname === "/EmailMarket") {
-            setLink({ emailLink: true, usersLink: false });
+            setLink({ emailLink: true, usersLink: false, databaseLink: false });
+        } else if (location.pathname === "/Database") {
+            setLink({ emailLink: false, usersLink: false, databaseLink: true });
         }
     }, [location]);
 
@@ -40,7 +43,13 @@ export const Sidebar: React.FC = () => {
                 <Link to='/EmailMarket' style={{ textDecoration: 'none' }}>
                     <S.SidebarItem active={link.emailLink}>
                         <i className="fa-regular fa-envelope" style={{ color: link.emailLink == true ? 'white' : 'black', fontSize: '1.3em' }}></i>
-                        <S.SidebarText active={link.emailLink}>Email Market</S.SidebarText>
+                        <S.SidebarText active={link.emailLink}>Email Marketing</S.SidebarText>
+                    </S.SidebarItem>
+                </Link>
+                <Link to='/Database' style={{ textDecoration: 'none' }}>
+                    <S.SidebarItem active={link.databaseLink}>
+                        <i className="fa-solid fa-database" style={{ color: link.databaseLink == true ? 'white' : 'black', fontSize: '1.3em' }}></i>
+                        <S.SidebarText active={link.databaseLink}>Database</S.SidebarText>
                     </S.SidebarItem>
                 </Link>
             </S.SidebarContent>
