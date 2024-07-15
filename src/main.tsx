@@ -4,14 +4,20 @@ import App from './App.tsx'
 import { IndexStyle } from './assets/Style/index.tsx'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { LoggedInProvider } from './Context/LoggedIn.context.tsx'
+import { UserProvider } from './Context/Users.context.tsx'
+import { FoodProvider } from './Context/Foods.context.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <LoggedInProvider>
-      <IndexStyle />
-      <Router>
-        <App />
-      </Router>
-    </LoggedInProvider>
+    <FoodProvider>
+      <UserProvider>
+        <LoggedInProvider>
+          <IndexStyle />
+          <Router>
+            <App />
+          </Router>
+        </LoggedInProvider>
+      </UserProvider>
+    </FoodProvider>
   </React.StrictMode>,
 )
