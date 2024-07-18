@@ -11,6 +11,7 @@ export interface IUser {
 }
 
 export interface Food {
+    id: number;
     name: string;
     portion: string;
     calories: number;
