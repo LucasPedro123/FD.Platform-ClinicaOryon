@@ -72,13 +72,13 @@ export const ColumnName = styled.th`
 `;
 
 export const Value = styled.td`
-    padding-block: 8px;
     font-family: 'Roboto';
     font-weight: 400;
     font-size: 12px;
     line-height: 12px;
     letter-spacing: 0.01em;
     color: #7D7D7D;
+    padding-top: 20px;
 `;
 
 export const Line = styled.tr`
@@ -95,6 +95,7 @@ width: 100%;
 
 export const Actions = styled.td`
     position: relative;
+    padding-top: 20px;
 
     button {
         background: none;
@@ -107,3 +108,80 @@ export const Actions = styled.td`
         }
     }
 `;
+
+export const ModalTitle = styled.h2`
+    margin-bottom: 22px;
+`
+
+export const WrapperForm = styled.div`
+    flex-direction: column;
+    display: flex;
+    gap: 6px;
+`
+
+export const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+`
+
+export const inputModal = styled.input`
+    outline: none;
+    background: transparent;
+    height: 40px;
+    border: 1px solid #C4C4C4;
+    border-radius: 8px;
+    padding-left: 20px;
+`
+export const Label = styled.label`
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 130%;
+    letter-spacing: 0.1px;
+    color: #323C47;
+`
+
+export const ButtonCancel = styled.button`
+    border: none;
+    cursor: pointer;
+    height: 38px;
+    border-radius: 6px;
+    padding-inline: 15px;
+    color: ${STYLE_GUIDE.color.white};
+    background: #7D7D7D;
+
+    transition: 0.3s;
+
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.2px;
+
+
+
+
+
+    &:hover{
+        background: #636363;
+    }
+    
+`
+
+export const ButtonConfirm = styled.button`
+    border: none;
+    height: 38px;
+    border-radius: 6px;
+    cursor: pointer;
+    
+    background-color: ${STYLE_GUIDE.color.secondary};
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.2px;
+    color: #FFFFFF;
+
+    padding-inline: 15px;
+    transition: 0.3s;
+
+    &:hover{
+        background: #6A5490;
+    }
+`
