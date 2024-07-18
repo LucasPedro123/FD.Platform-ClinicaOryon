@@ -3,8 +3,6 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../Services/fireConfig';
 import { Food, FoodContextType } from '../Interfaces/web.interfaces';
 
-
-
 const FoodContext = createContext<FoodContextType | undefined>(undefined);
 
 const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -29,8 +27,16 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     useEffect(() => {
-        fetchFoodItems();
-    }, [searchTerm]);
+        // Fetch all food items by default
+        const fetchAllFoodItems = async () => {
+            const foodCollection = collection(db, 'foodItems');
+            const querySnapshot = await getDocs(foodCollection);
+            const foods = querySnapshot.docs.map(doc => doc.data() as Food);
+            setFoodItems(foods);
+        };
+
+        fetchAllFoodItems();
+    }, []);
 
     return (
         <FoodContext.Provider value={{ foodItems, searchTerm, setSearchTerm, fetchFoodItems }}>
