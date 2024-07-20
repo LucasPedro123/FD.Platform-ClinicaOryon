@@ -18,7 +18,7 @@ export const Sidebar: React.FC = () => {
     useEffect(() => {
         if (location.pathname === "/Users") {
             setLink({ emailLink: false, usersLink: true, databaseLink: false });
-        } else if (location.pathname === "/EmailMarket") {
+        } else if (location.pathname === "/EmailMarketing") {
             setLink({ emailLink: true, usersLink: false, databaseLink: false });
         } else if (location.pathname === "/Database") {
             setLink({ emailLink: false, usersLink: false, databaseLink: true });
@@ -40,7 +40,7 @@ export const Sidebar: React.FC = () => {
                         <S.SidebarText active={link.usersLink}>Users</S.SidebarText>
                     </S.SidebarItem>
                 </Link>
-                <Link to='/EmailMarket' style={{ textDecoration: 'none' }}>
+                <Link to='/EmailMarketing' style={{ textDecoration: 'none' }}>
                     <S.SidebarItem active={link.emailLink}>
                         <i className="fa-regular fa-envelope" style={{ color: link.emailLink == true ? 'white' : 'black', fontSize: '1.3em' }}></i>
                         <S.SidebarText active={link.emailLink}>Email Marketing</S.SidebarText>
