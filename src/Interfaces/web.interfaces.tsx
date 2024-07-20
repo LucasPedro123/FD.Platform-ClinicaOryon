@@ -29,3 +29,16 @@ export interface UserContextType {
     userImages: { [key: string]: string };
     fetchUsers: () => void;
 }
+
+export interface IEmailSend {
+    emailSend: IEmailProps[]
+}
+
+export interface IEmailProps {
+    id: number;
+    image: string;
+    company: string;
+    title: string;
+    label: string;
+    component: () => JSX.Element; // Sem parâmetros
+}
