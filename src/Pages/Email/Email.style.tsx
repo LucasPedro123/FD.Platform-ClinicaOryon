@@ -67,6 +67,7 @@ export const EmailContentTitle = styled.h3`
     font-weight: 500;
     font-size: 18px;
     line-height: 23px;
+    color: ${STYLE_GUIDE.color.dark};
 `
 export const EmailContentLabel = styled.p`
     font-weight: 400;
