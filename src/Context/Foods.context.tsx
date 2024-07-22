@@ -6,37 +6,29 @@ import { Food, FoodContextType } from '../Interfaces/web.interfaces';
 const FoodContext = createContext<FoodContextType | undefined>(undefined);
 
 const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [allFoodItems, setAllFoodItems] = useState<Food[]>([]);
     const [foodItems, setFoodItems] = useState<Food[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
 
     const fetchFoodItems = async () => {
         const foodCollection = collection(db, 'foodItems');
         const querySnapshot = await getDocs(foodCollection);
-        const foods = querySnapshot.docs.map(doc => doc.data() as Food);
-
-        if (searchTerm) {
-            const filteredFoods = foods.filter(food =>
-                food.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setFoodItems(filteredFoods);
-        } else {
-            setFoodItems(foods);
-        }
-
+        const foods = querySnapshot.docs.map(doc => ({ ...doc.data(), firestoreId: doc.id }) as Food);
+        setAllFoodItems(foods);
+        setFoodItems(foods);
         console.log(`Número de alimentos: ${foods.length}`);
     };
 
     useEffect(() => {
-        // Fetch all food items by default
-        const fetchAllFoodItems = async () => {
-            const foodCollection = collection(db, 'foodItems');
-            const querySnapshot = await getDocs(foodCollection);
-            const foods = querySnapshot.docs.map(doc => doc.data() as Food);
-            setFoodItems(foods);
-        };
-
-        fetchAllFoodItems();
-    }, []);
+        if (searchTerm) {
+            const filteredFoods = allFoodItems.filter(food =>
+                food.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFoodItems(filteredFoods);
+        } else {
+            setFoodItems(allFoodItems);
+        }
+    }, [searchTerm, allFoodItems]);
 
     return (
         <FoodContext.Provider value={{ foodItems, searchTerm, setSearchTerm, fetchFoodItems }}>
