@@ -15,7 +15,9 @@ export interface Food {
     name: string;
     portion: string;
     calories: number;
+    firestoreId?: string; // Campo opcional para o ID do Firestore
 }
+
 
 export interface FoodContextType {
     foodItems: Food[];
