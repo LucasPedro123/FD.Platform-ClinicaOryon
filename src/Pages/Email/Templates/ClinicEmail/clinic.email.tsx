@@ -11,6 +11,12 @@ const Center = styled.td`
   width: 50%;
   padding: 20px 0;
   background-color: #fff;
+  
+`;
+const DivCenter = styled.td`
+  display: flex; 
+  justify-content: center;
+  width: 100%;
 `;
 
 const Content = styled.td`
@@ -28,7 +34,7 @@ const Button = styled.a`
   background-color: #080A40;
   color: #fff;
   text-decoration: none;
-  padding: 0px 14px;
+  padding: 14px 14px;
   display: inline-block;
 `;
 
@@ -84,19 +90,19 @@ const EmailTemplate1 = () => {
         </tr>
         <tr>
           <Content>
-            <h1 className="center" style={{ fontSize: '22px' }}>Olá, user_name! Bem-vindo à Clínica Oryon!</h1>
+            <h1 className="center" style={{ fontSize: '22px', textAlign: 'center' }}>Olá, user_name! Bem-vindo à Clínica Oryon!</h1>
             <p style={{ fontSize: '14px', fontWeight: '400', marginTop: '24px', textAlign: 'center', margin: '24px auto 0 auto' }}>
               Na Clínica Oryon, unimos expertise médica e tecnologia de ponta para oferecer tratamentos estéticos e de saúde personalizados.
             </p>
             <Image className="main-image" src="http://clinicaoryon.com.br/wp-content/uploads/2016/08/dr_danilo.jpg" style={{ maxWidth: '420px', width: '100%', marginTop: '20px' }} />
-            <p className="center" style={{ marginBottom: '24px', fontFamily: 'DM Sans', fontWeight: '400', fontSize: '14px', marginInline: '20px' }}>
+            <p className="center" style={{ marginBottom: '24px',textAlign: 'center', fontFamily: 'DM Sans', fontWeight: '400', fontSize: '14px', marginInline: '20px' }}>
               Dr. Danilo Bianchini Höfling, renomado endocrinologista e especialista em estética, possui Doutorado e Pós-Doutorado pela USP. Com vasta experiência e qualificação, ele oferece tratamentos inovadores e personalizados para sua saúde e beleza. Venha conhecer a excelência da Clínica Oryon!
             </p>
-            <div className="center">
-              <Button href="http://clinicaoryon.com.br/">
+            <DivCenter className="center">
+              <Button href="http://clinicaoryon.com.br/" target='_blank'>
                 <p style={{ color: '#fff' }}>Saiba mais</p>
               </Button>
-            </div>
+            </DivCenter>
           </Content>
         </tr>
         <tr>
@@ -105,14 +111,14 @@ const EmailTemplate1 = () => {
               <CardImage src="https://github.com/LucasPedro123/clinica-oryon-app/assets/107084988/5628a67c-95cc-4a9a-a7d1-e10b725cb1a6" alt="Estrutura de Ponta no Itaim Bibi" />
               <CardContent>
                 <h1 style={{ margin: '16px 0px 0px', fontWeight: '700', fontSize: '14px', textAlign: 'start' }}>Estrutura de ponta no Itaim Bibi</h1>
-                <FooterLink href="http://clinicaoryon.com.br/a-clinica/"><p>Ler mais</p></FooterLink>
+                <FooterLink href="http://clinicaoryon.com.br/a-clinica/" target='_blank'><p style={{color: '#080A40', marginBlockStart: 6}} >Ler mais</p></FooterLink>
               </CardContent>
             </Card>
             <Card>
               <CardImage src="https://sorridents.com.br/wp-content/uploads/site//2/post_thumbnail-d17ef48f99228d653b64a2f5b3bc874a-768x512.jpeg" alt="Equipe altamente qualificada" />
               <CardContent>
                 <h1 style={{ margin: '16px 0px 0px', fontWeight: '700', fontSize: '14px', textAlign: 'start' }}>Equipe altamente qualificada</h1>
-                <FooterLink href="http://clinicaoryon.com.br/a-clinica/"><p>Ler mais</p></FooterLink>
+                <FooterLink href="http://clinicaoryon.com.br/a-clinica/" target='_blank'><p style={{color: '#080A40', marginBlockStart: 10}} >Ler mais</p></FooterLink>
               </CardContent>
             </Card>
           </CardContainer>
@@ -123,49 +129,49 @@ const EmailTemplate1 = () => {
               <CardImage src="http://clinicaoryon.com.br/wp-content/uploads/2016/08/3-191015-Oryon-016.jpg" alt="Tecnologia de última geração" />
               <CardContent>
                 <h1 style={{ margin: '16px 0px 0px', fontWeight: '700', fontSize: '14px', textAlign: 'start' }}>Tecnologia de última geração</h1>
-                <FooterLink href="http://clinicaoryon.com.br/a-clinica/"><p>Ler mais</p></FooterLink>
+                <FooterLink href="http://clinicaoryon.com.br/a-clinica/" target='_blank'><p style={{color: '#080A40', marginBlockStart: 10}}>Ler mais</p></FooterLink>
               </CardContent>
             </Card>
             <Card>
               <CardImage src="http://clinicaoryon.com.br/wp-content/uploads/2016/08/estetica_nova.jpg" alt="Tratamentos personalizados" />
               <CardContent>
                 <h1 style={{ margin: '16px 0px 0px', fontWeight: '700', fontSize: '14px', textAlign: 'start' }}>Tratamentos personalizados</h1>
-                <FooterLink href="http://clinicaoryon.com.br/estetica/"><p>Ler mais</p></FooterLink>
+                <FooterLink href="http://clinicaoryon.com.br/estetica/" target='_blank'><p style={{color: '#080A40', marginBlockStart: 10}}>Ler mais</p></FooterLink>
               </CardContent>
             </Card>
           </CardContainer>
         </tr>
         <tr>
           <td style={{ textAlign: 'center', paddingBottom: '40px' }}>
-            <div className="center">
-              <Button href="http://clinicaoryon.com.br/">
+            <DivCenter className="center">
+              <Button href="http://clinicaoryon.com.br/" target='_blank'>
                 <p style={{ color: '#fff' }}>Saiba mais</p>
               </Button>
-            </div>
+            </DivCenter>
           </td>
         </tr>
         <tr>
           <SocialIcons>
             <table style={{ margin: '0 auto' }}>
               <tbody>
-                <tr>
+                <tr style={{display: 'flex', justifyContent: 'space-around', width: '50vw'}}>
                   <td>
-                    <a href="">
+                    <a href="" target='_blank'>
                       <Image src="https://github.com/LucasPedro123/clinica-oryon-app/assets/107084988/efa19c2c-9212-481c-944d-0fef76eaf8ed" width="30px" alt="Facebook" />
                     </a>
                   </td>
                   <td>
-                    <a href="">
+                    <a href="" target='_blank'>
                       <Image src="https://github.com/LucasPedro123/clinica-oryon-app/assets/107084988/1ffe0214-0a40-40a4-98af-3a96b0df24a7" width="30px" alt="Instagram" />
                     </a>
                   </td>
                   <td>
-                    <a href="">
+                    <a href="" target='_blank'>
                       <Image src="https://github.com/LucasPedro123/clinica-oryon-app/assets/107084988/15490e1b-4960-4dfd-a0bc-70279e74d3ad" width="30px" alt="Twitter" />
                     </a>
                   </td>
                   <td>
-                    <a href="">
+                    <a href="" target='_blank'>
                       <Image src="https://github.com/LucasPedro123/clinica-oryon-app/assets/107084988/efeff5c7-335c-4b40-b155-9160516e4472" width="30px" alt="LinkedIn" />
                     </a>
                   </td>
