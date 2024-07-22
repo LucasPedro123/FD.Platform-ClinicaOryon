@@ -177,11 +177,55 @@ export const ButtonConfirm = styled.button`
     line-height: 24px;
     letter-spacing: -0.2px;
     color: #FFFFFF;
-
-    padding-inline: 15px;
+    width: 80px;
     transition: 0.3s;
 
     &:hover{
         background: #6A5490;
     }
 `
+
+export const ModalOptions = styled.div`
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    width: 80px;
+    background: #F1F1F1;
+    box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    overflow: 'auto';
+`
+
+export const ButtonWrapper = styled.div`
+    display: flex;  
+    justify-content: end;
+    gap: 12px;
+    margin-top: 20px;
+`
+
+export const ButtonText = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    &:hover{
+        background-color: #e4e4e4;
+    }
+`
+
+export const TextBackground = styled.div`
+    padding-block: 10px;
+    cursor: pointer;
+    
+    &:hover{
+        background-color: #e4e4e4;
+    }
+`
+
+export const ModalText = styled.p``
