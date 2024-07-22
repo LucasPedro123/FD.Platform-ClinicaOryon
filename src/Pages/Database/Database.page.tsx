@@ -53,7 +53,7 @@ export const Database: React.FC = () => {
     };
     const handleEditFood = async () => {
         setLoading(true);
-        if (!selectedFood) return;
+        if (!selectedFood || !selectedFood.firestoreId) return;
         try {
             const foodDoc = doc(db, 'foodItems', selectedFood.firestoreId);
             await updateDoc(foodDoc, {
@@ -74,7 +74,7 @@ export const Database: React.FC = () => {
     };
 
     const handleDeleteFood = async () => {
-        if (!selectedFood) return;
+        if (!selectedFood || !selectedFood.firestoreId) return;
         setLoading(true);
         try {
             const foodDoc = doc(db, 'foodItems', selectedFood.firestoreId);
