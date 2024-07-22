@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../Services/fireConfig';
 import { Food, FoodContextType } from '../Interfaces/web.interfaces';
 
@@ -20,6 +20,10 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     useEffect(() => {
+        fetchFoodItems();
+    }, []);
+
+    useEffect(() => {
         if (searchTerm) {
             const filteredFoods = allFoodItems.filter(food =>
                 food.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -30,8 +34,33 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     }, [searchTerm, allFoodItems]);
 
+    const addFoodItem = async (newFood: Food) => {
+        try {
+            const docRef = await addDoc(collection(db, 'foodItems'), newFood);
+            const foodWithId = { ...newFood, firestoreId: docRef.id };
+            setAllFoodItems(prevFoods => [...prevFoods, foodWithId]);
+            setFoodItems(prevFoods => [...prevFoods, foodWithId]);
+        } catch (error) {
+            console.error('Error adding document: ', error);
+        }
+    };
+
+    const updateFoodItem = (updatedFood: Food) => {
+        setAllFoodItems(prevFoods =>
+            prevFoods.map(food => (food.firestoreId === updatedFood.firestoreId ? updatedFood : food))
+        );
+        setFoodItems(prevFoods =>
+            prevFoods.map(food => (food.firestoreId === updatedFood.firestoreId ? updatedFood : food))
+        );
+    };
+
+    const deleteFoodItem = (foodId: string | undefined) => {
+        setAllFoodItems(prevFoods => prevFoods.filter(food => food.firestoreId !== foodId));
+        setFoodItems(prevFoods => prevFoods.filter(food => food.firestoreId !== foodId));
+    };
+
     return (
-        <FoodContext.Provider value={{ foodItems, searchTerm, setSearchTerm, fetchFoodItems }}>
+        <FoodContext.Provider value={{ foodItems, searchTerm, setSearchTerm, fetchFoodItems, addFoodItem, updateFoodItem, deleteFoodItem }}>
             {children}
         </FoodContext.Provider>
     );

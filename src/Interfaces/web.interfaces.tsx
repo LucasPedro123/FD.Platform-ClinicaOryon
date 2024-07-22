@@ -24,6 +24,9 @@ export interface FoodContextType {
     searchTerm: string;
     setSearchTerm: (term: string) => void;
     fetchFoodItems: () => void;
+    updateFoodItem: (updatedFood: Food) => void;
+    deleteFoodItem: (foodId: string | undefined) => void;
+    addFoodItem: (food: Food ) => void;
 }
 
 export interface UserContextType {
