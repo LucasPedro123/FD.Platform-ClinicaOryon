@@ -21,7 +21,8 @@ export const UsersWrapper = styled.div`
     padding: 0 20px; 
 
     display: flex;
-    gap: 120px;
+    flex-direction: column;
+    gap: 30px;
 `;
 
 export const UserLabel = styled.p`
@@ -36,7 +37,15 @@ export const UserLabel = styled.p`
     color: #C4C4C4;
 `
 export const UserDiv = styled.div`
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
+export const MetricsDiv = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 30px;
 `
 
 export const UserLength = styled.h1`
@@ -165,3 +174,62 @@ export const ModalText = styled.p`
     color: #323C47;
     margin-top: 15px;
 `   
+
+
+export const ModalOptions = styled.div`
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    width: 80px;
+    background: #F1F1F1;
+    box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    overflow: 'auto';
+`
+
+
+export const ButtonText = styled.p`
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    &:hover{
+        background-color: #e4e4e4;
+    }
+`
+
+export const TextBackground = styled.div`
+    padding-block: 10px;
+    cursor: pointer;
+    
+    &:hover{
+        background-color: #e4e4e4;
+    }
+`
+export const SearchInput = styled.div`
+    border: 1px solid #C4C4C4;
+    border-radius: 8px;
+    width: 300px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-left: 22px;
+`
+    
+export const Input = styled.input`
+    outline: none;
+    border: none;
+    width: 90%;
+    
+    
+`
+export const Icon = styled.i`
+    color: #C4C4C4;
+`

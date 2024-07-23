@@ -1,50 +1,81 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as S from './User.style';
-import { db, auth, storage } from '../../Services/fireConfig';
-import { deleteDoc, doc } from "firebase/firestore";
-import { ref, deleteObject } from "firebase/storage";
-import { deleteUser } from "firebase/auth";
 import iconUser from '../../assets/icon-user.png';
 import Modal from 'react-modal';
 import { useUserContext } from '../../Context/Users.context';
 import { IUser } from "../../Interfaces/web.interfaces";
+import { ClipLoader } from "react-spinners";
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 
 export const Users: React.FC = () => {
-    const { users, userImages, fetchUsers } = useUserContext();
-    const [showModal, setShowModal] = useState(false);
+    const { users, userImages, deleteUserAccount } = useUserContext();
+    const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
+    const [optionsIsOpen, setOptionsIsOpen] = useState<number | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const optionsRef = useRef<HTMLDivElement>(null);
+
+    // Handler for clicking outside the options menu
+    const handleClickOutside = (event: MouseEvent) => {
+        if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
+            setOptionsIsOpen(null);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleDeleteUser = async () => {
         if (selectedUser) {
+            setLoading(true);
             try {
-                const userAuth = auth.currentUser;
-                if (userAuth) {
-                    await deleteUser(userAuth);
-                }
-
-                await deleteDoc(doc(db, 'users', selectedUser.userId));
-
-                const imageRef = ref(storage, `profile_pictures/${selectedUser.userId}.jpg`);
-                await deleteObject(imageRef);
-
-                fetchUsers(); // Atualizar a lista de usuários
+                await deleteUserAccount(selectedUser);
                 setShowModal(false);
                 setSelectedUser(null);
             } catch (error) {
                 console.error('Error deleting user:', error);
+                toast.error('Error deleting user.');
+            } finally {
+                setLoading(false);
             }
         }
     };
 
+    const handleOptionsClick = (index: number) => {
+        setOptionsIsOpen(optionsIsOpen === index ? null : index);
+    };
+
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.phone.includes(searchTerm)
+    );
+
     return (
         <S.UserContainer>
             <S.UsersWrapper>
-                <S.UserDiv>
-                    <S.UserLength>{users.length}</S.UserLength>
-                    <S.UserLabel>Peoples</S.UserLabel>
-                </S.UserDiv>
+                <S.MetricsDiv>
+                    <S.UserDiv>
+                        <S.UserLength>{filteredUsers.length}</S.UserLength>
+                        <S.UserLabel>Peoples</S.UserLabel>
+                    </S.UserDiv>
+                    
+                </S.MetricsDiv>
+                <S.SearchInput>
+                    <S.Icon className="fa-solid fa-magnifying-glass"></S.Icon>
+                    <S.Input
+                        placeholder="Pesquisar usuário..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </S.SearchInput>
             </S.UsersWrapper>
             <S.Table>
                 <S.Head>
@@ -58,7 +89,7 @@ export const Users: React.FC = () => {
                     </S.Column>
                 </S.Head>
                 <S.Body>
-                    {users.map((user) => (
+                    {filteredUsers.map((user, index: number) => (
                         <S.Line key={user.userId}>
                             <S.LineProfile>
                                 {userImages[user.userId] ? (
@@ -73,15 +104,22 @@ export const Users: React.FC = () => {
                             <S.Value>{user.password}</S.Value>
                             <S.Value>{user.weeklyCalories?.toFixed(2)}</S.Value>
                             <S.Actions>
-                                <button onClick={() => { setSelectedUser(user); setShowModal(true); }}>⋮</button>
+                                <button onClick={() => { setSelectedUser(user); handleOptionsClick(index); }}>⋮</button>
+                                {
+                                    optionsIsOpen === index &&
+                                    <S.ModalOptions ref={optionsRef}>
+                                        <S.TextBackground onClick={() => setShowModal(true)}>
+                                            <S.ButtonText>Excluir</S.ButtonText>
+                                        </S.TextBackground>
+                                    </S.ModalOptions>
+                                }
                             </S.Actions>
                         </S.Line>
                     ))}
                 </S.Body>
             </S.Table>
 
-            {selectedUser && (
-                <Modal
+            <Modal
                     isOpen={showModal}
                     onRequestClose={() => setShowModal(false)}
                     contentLabel="Confirm Delete"
@@ -102,13 +140,12 @@ export const Users: React.FC = () => {
                     }}
                 >
                     <S.ModalTitle>Deseja excluir este usuário?</S.ModalTitle>
-                    <S.ModalText>Tem certeza que deseja excluir o usuário {selectedUser.name}?</S.ModalText>
+                    <S.ModalText>Tem certeza que deseja excluir o usuário {selectedUser?.name}?</S.ModalText>
                     <S.ButtonWrapper >
                         <S.ButtonCancel  onClick={() => setShowModal(false)}>Cancelar</S.ButtonCancel>
-                        <S.ButtonConfirm  onClick={handleDeleteUser} style={{ marginLeft: '10px' }}>Excluir</S.ButtonConfirm>
+                    <S.ButtonConfirm onClick={handleDeleteUser} style={{ marginLeft: '10px' }}>{loading ? <ClipLoader size={20} color="#FFF" /> : 'Excluir' }</S.ButtonConfirm>
                     </S.ButtonWrapper>
                 </Modal>
-            )}
         </S.UserContainer>
     );
 };
