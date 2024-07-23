@@ -1,12 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { db, storage } from '../Services/fireConfig';
-import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
-import { ref, getDownloadURL } from 'firebase/storage';
+import { db, storage, auth } from '../Services/fireConfig';
+import { collection, getDocs, query, where, Timestamp, deleteDoc, doc } from 'firebase/firestore';
+import { ref, getDownloadURL, deleteObject } from 'firebase/storage';
+import { deleteUser } from 'firebase/auth';
 import { IUser, UserContextType } from '../Interfaces/web.interfaces';
-
-
-
-
+import { toast } from 'react-toastify';
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -71,12 +69,35 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setUserImages(images);
     };
 
+    const deleteUserAccount = async (user: IUser) => {
+        try {
+            // Excluir o usuário do Firebase Auth
+            const userToDelete = auth.currentUser;
+            if (userToDelete) {
+                await deleteUser(userToDelete);
+            }
+
+            // Excluir o documento do Firestore
+            await deleteDoc(doc(db, 'users', user.userId));
+
+            // Excluir a imagem do Firebase Storage
+            const imageRef = ref(storage, `profile_pictures/${user.userId}.jpg`);
+            await deleteObject(imageRef);
+
+            // Remover o usuário do array local
+            setUsers((prevUsers) => prevUsers.filter((u) => u.userId !== user.userId));
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            toast.error('Error deleting user.');
+        }
+    };
+
     useEffect(() => {
         fetchUsers();
     }, []);
 
     return (
-        <UserContext.Provider value={{ users, userImages, fetchUsers }}>
+        <UserContext.Provider value={{ users, userImages, fetchUsers, deleteUserAccount }}>
             {children}
         </UserContext.Provider>
     );
