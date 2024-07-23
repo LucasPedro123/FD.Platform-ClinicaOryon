@@ -33,6 +33,7 @@ export interface UserContextType {
     users: IUser[];
     userImages: { [key: string]: string };
     fetchUsers: () => void;
+    deleteUserAccount: (user: IUser) => Promise<void>;
 }
 
 export interface IEmailSend {
