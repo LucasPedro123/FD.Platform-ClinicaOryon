@@ -8,6 +8,7 @@ export interface IUser {
     photoURL: string;
     userId: string;
     weeklyCalories?: number;
+    firestoreId?: string | undefined;
 }
 
 export interface Food {
@@ -15,7 +16,7 @@ export interface Food {
     name: string;
     portion: string;
     calories: number;
-    firestoreId?: string; // Campo opcional para o ID do Firestore
+    firestoreId?: string; 
 }
 
 
