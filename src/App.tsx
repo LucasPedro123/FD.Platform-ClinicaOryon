@@ -1,6 +1,7 @@
 import AppRouter from './Routes/index'
 import { Sidebar } from './Components/Sidebar/Sidebar.component';
 import { useLocation } from 'react-router';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <div style={{ display: 'flex' }}>
       {location.pathname !== '/' ? <Sidebar /> : ''}
       <AppRouter />
+      <ToastContainer />
     </div>
   )
 }
