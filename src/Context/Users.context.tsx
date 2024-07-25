@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { db, storage, auth } from '../Services/fireConfig';
-import { collection, getDocs, query, where, Timestamp, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, query, where, Timestamp,  doc, deleteDoc } from 'firebase/firestore';
 import { ref, getDownloadURL, deleteObject } from 'firebase/storage';
-import { deleteUser } from 'firebase/auth';
+import { deleteUser,  signInWithEmailAndPassword } from 'firebase/auth';
 import { IUser, UserContextType } from '../Interfaces/web.interfaces';
 import { toast } from 'react-toastify';
 
@@ -35,17 +35,17 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                         where('date', '>=', Timestamp.fromDate(startOfWeek)),
                         where('date', '<=', Timestamp.fromDate(endOfWeek))
                     );
-
+                    
                     const foodSnapshot = await getDocs(foodQuery);
                     const foods = foodSnapshot.docs.map(doc => doc.data());
 
                     const totalCalories = foods.reduce((total, food: any) => total + food.calories, 0);
                     userData.weeklyCalories = totalCalories;
-
+                    userData.firestoreId = doc.id;
                     usersData.push(userData);
                 }
             }
-
+            
             setUsers(usersData);
             await fetchUserImages(usersData);
         } catch (error) {
@@ -71,21 +71,27 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const deleteUserAccount = async (user: IUser) => {
         try {
+            // Autenticar o usuário com email e senha
+            const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
+            const userToDelete = userCredential.user;
+
             // Excluir o usuário do Firebase Auth
-            const userToDelete = auth.currentUser;
-            if (userToDelete) {
-                await deleteUser(userToDelete);
-            }
+            await deleteUser(userToDelete);
+            console.log(`Successfully deleted user with ID: ${user.userId}`);
 
             // Excluir o documento do Firestore
-            await deleteDoc(doc(db, 'users', user.userId));
+            if (user.firestoreId) {
+                await deleteDoc(doc(db, 'users', user.firestoreId));
+            }
+            // Remover o usuário do array local
+            setUsers((prevUsers) => prevUsers.filter((u) => u.userId !== user.userId));
 
             // Excluir a imagem do Firebase Storage
             const imageRef = ref(storage, `profile_pictures/${user.userId}.jpg`);
-            await deleteObject(imageRef);
+            if (imageRef) {
+                await deleteObject(imageRef);
+            }
 
-            // Remover o usuário do array local
-            setUsers((prevUsers) => prevUsers.filter((u) => u.userId !== user.userId));
         } catch (error) {
             console.error('Error deleting user:', error);
             toast.error('Error deleting user.');
