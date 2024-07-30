@@ -12,6 +12,7 @@ export interface IUser {
 }
 
 export interface Food {
+    _id?: any;
     id: number;
     name: string;
     portion: string;
@@ -26,7 +27,7 @@ export interface FoodContextType {
     setSearchTerm: (term: string) => void;
     fetchFoodItems: () => void;
     updateFoodItem: (updatedFood: Food) => void;
-    deleteFoodItem: (foodId: string | undefined) => void;
+    deleteFoodItem: (foodId: number) => void;
     addFoodItem: (food: Food ) => void;
 }
 
