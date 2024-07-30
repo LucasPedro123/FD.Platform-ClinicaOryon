@@ -151,7 +151,7 @@ export const ButtonConfirm = styled.button`
     
     background-color: ${STYLE_GUIDE.color.secondary};
     color: ${STYLE_GUIDE.color.white};
-    padding-inline: 15px;
+    width: 85px;
     transition: 0.3s;
 
     &:hover{
