@@ -12,7 +12,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const fetchFoodItems = async () => {
         try {
-            const response = await axios.get('https://fooddatajson.onrender.com/api/foods');
+            const response = await axios.get('https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods');
             setAllFoodItems(response.data);
         } catch (error) {
             console.error('Error fetching food items:', error);
@@ -39,7 +39,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const addFoodItem = async (newFood: Food) => {
         try {
             // Adiciona o alimento no banco de dados do servidor
-            const response = await axios.post('https://fooddatajson.onrender.com/api/foods', newFood);
+            const response = await axios.post('https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods', newFood);
             const foodWithId = { ...newFood, id: response.data._id };
     
             // Atualiza o estado local com o novo alimento
@@ -54,7 +54,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const updateFoodItem = async (updatedFood: Food) => {
         try {
             // Atualiza o alimento no banco de dados do servidor
-            await axios.put(`https://fooddatajson.onrender.com/api/foods/${updatedFood.id}`, updatedFood);
+            await axios.put(`https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods/${updatedFood.id}`, updatedFood);
             
             console.log(updatedFood)
             // Atualiza o estado local com o alimento atualizado
@@ -76,7 +76,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const deleteFoodItem = async (foodId:number ) => {
         try {
             // Remove o alimento do banco de dados do servidor
-            await axios.delete(`https://fooddatajson.onrender.com/api/foods/${foodId}`);
+            await axios.delete(`https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods/${foodId}`);
     
             // Atualiza o estado local removendo o alimento
             setAllFoodItems(prevFoods => prevFoods.filter(food => food._id !== foodId));
