@@ -28,7 +28,7 @@ export interface FoodContextType {
     fetchFoodItems: () => void;
     updateFoodItem: (updatedFood: Food) => void;
     deleteFoodItem: (foodId: number) => void;
-    addFoodItem: (food: Food ) => void;
+    addFoodItem: (food: Food) => void;
 }
 
 export interface UserContextType {
@@ -36,6 +36,8 @@ export interface UserContextType {
     userImages: { [key: string]: string };
     fetchUsers: () => void;
     deleteUserAccount: (user: IUser) => Promise<void>;
+    getUserWeeklyCalories?: (userId: string) => Promise<number>;
+    getUserDailyCalories?:(userId: string) => Promise<{ date: string; calories: number; }[]>;
 }
 
 export interface IEmailSend {
