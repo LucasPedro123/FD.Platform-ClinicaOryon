@@ -6,17 +6,24 @@ import { useUserContext } from '../../Context/Users.context';
 import { IUser } from "../../Interfaces/web.interfaces";
 import { ClipLoader } from "react-spinners";
 import { toast } from 'react-toastify';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { STYLE_GUIDE } from "../../assets/Style/global";
+
 
 Modal.setAppElement('#root');
 
 export const Users: React.FC = () => {
-    const { users, userImages, deleteUserAccount } = useUserContext();
+    const { users, userImages, deleteUserAccount, getUserDailyCalories, getUserWeeklyCalories } = useUserContext();
+    const [showModalUser, setShowModalUser] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
     const [optionsIsOpen, setOptionsIsOpen] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [weeklyCalories, setWeeklyCalories] = useState<number>(0);
+    const [dailyCalories, setDailyCalories] = useState<{ date: string, calories: number }[]>([]);
     const optionsRef = useRef<HTMLDivElement>(null);
+
 
     // Handler for clicking outside the options menu
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,6 +65,28 @@ export const Users: React.FC = () => {
         user.phone.includes(searchTerm)
     );
 
+    const handleViewUser = async (user: IUser) => {
+        if (!getUserWeeklyCalories || !getUserDailyCalories) {
+            console.error('Funções de busca de calorias não estão definidas');
+            toast.error('Erro ao buscar as calorias do usuário.');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const weeklyCalories = await getUserWeeklyCalories(user.userId);
+            const dailyCalories = await getUserDailyCalories(user.userId);
+            setWeeklyCalories(weeklyCalories);
+            setDailyCalories(dailyCalories);
+            setSelectedUser(user);
+            setShowModalUser(true);
+        } catch (error) {
+            console.error('Error fetching calories:', error);
+            toast.error('Error fetching calories.');
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <S.UserContainer>
             <S.UsersWrapper>
@@ -66,7 +95,7 @@ export const Users: React.FC = () => {
                         <S.UserLength>{filteredUsers.length}</S.UserLength>
                         <S.UserLabel>Peoples</S.UserLabel>
                     </S.UserDiv>
-                    
+
                 </S.MetricsDiv>
                 <S.SearchInput>
                     <S.Icon className="fa-solid fa-magnifying-glass"></S.Icon>
@@ -108,6 +137,9 @@ export const Users: React.FC = () => {
                                 {
                                     optionsIsOpen === index &&
                                     <S.ModalOptions ref={optionsRef}>
+                                        <S.TextBackground onClick={() => handleViewUser(user)}>
+                                            <S.ButtonText>Visualizar</S.ButtonText>
+                                        </S.TextBackground>
                                         <S.TextBackground onClick={() => setShowModal(true)}>
                                             <S.ButtonText>Excluir</S.ButtonText>
                                         </S.TextBackground>
@@ -120,32 +152,83 @@ export const Users: React.FC = () => {
             </S.Table>
 
             <Modal
-                    isOpen={showModal}
-                    onRequestClose={() => setShowModal(false)}
-                    contentLabel="Confirm Delete"
-                    style={{
-                        overlay: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                        },
-                        content: {
-                            top: '50%',
-                            left: '50%',
-                            right: 'auto',
-                            bottom: 'auto',
-                            marginRight: '-50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: '450px',
-                            padding: '20px',
-                        },
-                    }}
-                >
-                    <S.ModalTitle>Deseja excluir este usuário?</S.ModalTitle>
-                    <S.ModalText>Tem certeza que deseja excluir o usuário {selectedUser?.name}?</S.ModalText>
-                    <S.ButtonWrapper >
-                        <S.ButtonCancel  onClick={() => setShowModal(false)}>Cancelar</S.ButtonCancel>
-                    <S.ButtonConfirm onClick={handleDeleteUser} style={{ marginLeft: '10px' }}>{loading ? <ClipLoader size={20} color="#FFF" /> : 'Excluir' }</S.ButtonConfirm>
-                    </S.ButtonWrapper>
-                </Modal>
+                isOpen={showModal}
+                onRequestClose={() => setShowModal(false)}
+                contentLabel="Confirm Delete"
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                    },
+                    content: {
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '450px',
+                        padding: '20px',
+                    },
+                }}
+            >
+                <S.ModalTitle>Deseja excluir este usuário?</S.ModalTitle>
+                <S.ModalText>Tem certeza que deseja excluir o usuário {selectedUser?.name}?</S.ModalText>
+                <S.ButtonWrapper >
+                    <S.ButtonCancel onClick={() => setShowModal(false)}>Cancelar</S.ButtonCancel>
+                    <S.ButtonConfirm onClick={handleDeleteUser} style={{ marginLeft: '10px' }}>{loading ? <ClipLoader size={20} color="#FFF" /> : 'Excluir'}</S.ButtonConfirm>
+                </S.ButtonWrapper>
+            </Modal>
+
+            <Modal
+                isOpen={showModalUser}
+                onRequestClose={() => setShowModalUser(false)}
+                contentLabel="Confirm Delete"
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                    },
+                    content: {
+                        position: "absolute",
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        marginRight: '-50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '450px',
+                        padding: '20px',
+                        backgroundColor: '#fff', // Fundo opaco para o conteúdo do modal
+                    },
+                }}
+            >
+                {selectedUser && (
+                    <S.ModalContent>
+                        <S.ModalUserWrapper>
+                            {userImages[selectedUser.userId] ? (
+                                <img src={userImages[selectedUser.userId]} alt={selectedUser.name} style={{ width: '43px', height: '43px', objectFit: 'cover', borderRadius: '100%' }} />
+                            ) : (
+                                <img src={iconUser} alt="user" />
+                            )}
+                            <S.ModelUserName>
+                                {selectedUser.name}
+                            </S.ModelUserName>
+                        </S.ModalUserWrapper>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={dailyCalories} >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="calories" fill={STYLE_GUIDE.color.secondary} radius={50} barSize={30}/>
+                            </BarChart>
+                        </ResponsiveContainer>
+                        <S.ButtonCancel onClick={() => setShowModalUser(false)}>
+                            Cancelar
+                        </S.ButtonCancel>
+                    </S.ModalContent>
+                )}
+            </Modal>
         </S.UserContainer>
     );
 };
