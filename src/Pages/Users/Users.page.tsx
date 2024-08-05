@@ -20,7 +20,6 @@ export const Users: React.FC = () => {
     const [optionsIsOpen, setOptionsIsOpen] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [weeklyCalories, setWeeklyCalories] = useState<number>(0);
     const [dailyCalories, setDailyCalories] = useState<{ date: string, calories: number }[]>([]);
     const optionsRef = useRef<HTMLDivElement>(null);
 
@@ -74,9 +73,7 @@ export const Users: React.FC = () => {
 
         setLoading(true);
         try {
-            const weeklyCalories = await getUserWeeklyCalories(user.userId);
             const dailyCalories = await getUserDailyCalories(user.userId);
-            setWeeklyCalories(weeklyCalories);
             setDailyCalories(dailyCalories);
             setSelectedUser(user);
             setShowModalUser(true);
