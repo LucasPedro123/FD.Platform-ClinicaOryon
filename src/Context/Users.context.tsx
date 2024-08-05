@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { db, storage, auth } from '../Services/fireConfig';
-import { collection, getDocs, query, where, Timestamp,  doc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, query, where, Timestamp, doc, deleteDoc } from 'firebase/firestore';
 import { ref, getDownloadURL, deleteObject } from 'firebase/storage';
-import { deleteUser,  signInWithEmailAndPassword } from 'firebase/auth';
+import { deleteUser, signInWithEmailAndPassword } from 'firebase/auth';
 import { IUser, UserContextType } from '../Interfaces/web.interfaces';
 import { toast } from 'react-toastify';
 
@@ -71,22 +71,20 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const deleteUserAccount = async (user: IUser) => {
         try {
-            // Autenticar o usuário com email e senha
             const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
             const userToDelete = userCredential.user;
 
-            // Excluir o usuário do Firebase Auth
             await deleteUser(userToDelete);
             console.log(`Successfully deleted user with ID: ${user.userId}`);
 
-            // Excluir o documento do Firestore
             if (user.firestoreId) {
                 await deleteDoc(doc(db, 'users', user.firestoreId));
+                await deleteDoc(doc(db, 'users', user.firestoreId, 'foods'));
             }
-            // Remover o usuário do array local
-            setUsers((prevUsers) => prevUsers.filter((u) => u.userId !== user.userId));
 
-            // Excluir a imagem do Firebase Storage
+            setUsers((prevUsers) => prevUsers.filter((u) => u.userId !== user.userId));
+            toast.success('Usuário deletado com sucesso');
+
             const imageRef = ref(storage, `profile_pictures/${user.userId}.jpg`);
             if (imageRef) {
                 await deleteObject(imageRef);
@@ -98,12 +96,59 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
+    const getUserWeeklyCalories = async (userId: string) => {
+        try {
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            startOfWeek.setHours(0, 0, 0, 0);
+
+            const endOfWeek = new Date(today);
+            endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
+            endOfWeek.setHours(23, 59, 59, 999);
+
+            const foodsCollectionRef = collection(db, `users/${userId}/foods`);
+            const foodQuery = query(
+                foodsCollectionRef,
+                where('date', '>=', Timestamp.fromDate(startOfWeek)),
+                where('date', '<=', Timestamp.fromDate(endOfWeek))
+            );
+            
+            const foodSnapshot = await getDocs(foodQuery);
+            const foods = foodSnapshot.docs.map(doc => doc.data());
+
+            const totalCalories = foods.reduce((total, food: any) => total + food.calories, 0);
+            return totalCalories;
+        } catch (error) {
+            console.error('Error fetching user weekly calories:', error);
+            return 0;
+        }
+    };
+
+    const getUserDailyCalories = async (userId: string) => {
+        const foodsCollectionRef = collection(db, `users/${userId}/foods`);
+        const foodSnapshot = await getDocs(foodsCollectionRef);
+        const foods = foodSnapshot.docs.map(doc => doc.data());
+    
+        const caloriesByDay: { [date: string]: number } = {};
+    
+        foods.forEach((food: any) => {
+            const date = food.date.toDate().toISOString().split('T')[0]; // Converte o Timestamp para string de data
+            if (!caloriesByDay[date]) {
+                caloriesByDay[date] = 0;
+            }
+            caloriesByDay[date] += food.calories;
+        });
+    
+        return Object.entries(caloriesByDay).map(([date, calories]) => ({ date, calories }));
+    };
+
     useEffect(() => {
         fetchUsers();
     }, []);
 
     return (
-        <UserContext.Provider value={{ users, userImages, fetchUsers, deleteUserAccount }}>
+        <UserContext.Provider value={{ users, userImages, fetchUsers, deleteUserAccount, getUserWeeklyCalories, getUserDailyCalories }}>
             {children}
         </UserContext.Provider>
     );
