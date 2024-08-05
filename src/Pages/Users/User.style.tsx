@@ -58,6 +58,8 @@ export const UserLength = styled.h1`
 `;
 
 export const Column = styled.tr`
+
+    
 `;
 
 export const ColumnName = styled.th`
@@ -104,8 +106,18 @@ width: 100%;
 `;
 
 export const Head = styled.thead`
-width: 100%;
-
+    position: relative; 
+    width: 100%;
+  
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 1px; 
+        background: ${STYLE_GUIDE.color.grayLight}; 
+    }
 `;
 
 export const Actions = styled.td`
@@ -118,7 +130,7 @@ export const Actions = styled.td`
         cursor: pointer;
 
         &:hover {
-            color: ${STYLE_GUIDE.color.secondary}; // Cor ao passar o mouse
+            color: ${STYLE_GUIDE.color.secondary}; 
         }
     }
 `;
@@ -134,7 +146,7 @@ export const ButtonCancel = styled.button`
     padding-inline: 15px;
     color: ${STYLE_GUIDE.color.white};
     background: #7D7D7D;
-
+    align-self: end;
     transition: 0.3s;
 
     &:hover{
@@ -173,14 +185,13 @@ export const ModalText = styled.p`
     letter-spacing: 0.01em;
     color: #323C47;
     margin-top: 15px;
-`   
+`
 
 
 export const ModalOptions = styled.div`
     position: absolute;
     bottom: 20px;
     right: 10px;
-    width: 80px;
     background: #F1F1F1;
     box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
     text-align: center;
@@ -206,6 +217,10 @@ export const ButtonText = styled.p`
 
 export const TextBackground = styled.div`
     padding-block: 10px;
+    padding-inline: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
     
     &:hover{
@@ -222,7 +237,7 @@ export const SearchInput = styled.div`
     gap: 13px;
     padding-left: 22px;
 `
-    
+
 export const Input = styled.input`
     outline: none;
     border: none;
@@ -230,6 +245,32 @@ export const Input = styled.input`
     
     
 `
+
+export const Divider = styled.div`
+    width: 100%;
+    height: 1px;
+    background: #EBEFF2;
+    align-self: stretch;
+    flex-grow: 1;
+
+`
 export const Icon = styled.i`
     color: #C4C4C4;
+`
+
+export const ModalContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+`
+
+export const ModalUserWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+`
+export const ModelUserName = styled.h3`
+
 `
