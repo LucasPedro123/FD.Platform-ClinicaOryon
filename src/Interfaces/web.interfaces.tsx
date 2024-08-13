@@ -7,6 +7,7 @@ export interface IUser {
     phone: string;
     photoURL: string;
     userId: string;
+    birthDate?: string;
     weeklyCalories?: number;
     firestoreId?: string | undefined;
 }
@@ -51,4 +52,18 @@ export interface IEmailProps {
     title: string;
     label: string;
     component: () => JSX.Element; // Sem parâmetros
+}
+export interface Notification {
+    id: string;
+    title: string;
+    content: string;
+    date: string;
+}
+export interface NotificationsContextProps {
+    notifications: Notification[];
+    loading: boolean;
+    fetchNotifications: () => void;
+    addNotification: (notification: Omit<Notification, 'id'>) => void;
+    editNotification: (id: string, updatedNotification: Omit<Notification, 'id'>) => void;
+    deleteNotification: (id: string) => void;
 }
