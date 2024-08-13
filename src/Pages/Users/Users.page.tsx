@@ -84,6 +84,24 @@ export const Users: React.FC = () => {
             setLoading(false);
         }
     };
+
+    const formatDate = (dateString : string | undefined) => {
+        // Cria um objeto Date a partir da string ISO 8601
+        if (dateString == undefined) {
+            return;
+        }
+        
+        const date = new Date(dateString);
+      
+        // Extrai o dia, o mês e o ano
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês começa de 0, então adicionamos 1
+        const year = date.getFullYear();
+      
+        // Retorna a data formatada no formato DD/MM/AAAA
+        return `${day}/${month}/${year}`;
+    };
+    
     return (
         <S.UserContainer>
             <S.UsersWrapper>
@@ -110,6 +128,7 @@ export const Users: React.FC = () => {
                         <S.ColumnName>Email</S.ColumnName>
                         <S.ColumnName>Telefone</S.ColumnName>
                         <S.ColumnName>Senha</S.ColumnName>
+                        <S.ColumnName>Data de Nascimento</S.ColumnName>
                         <S.ColumnName>Calorias Semanais</S.ColumnName>
                         <S.ColumnName></S.ColumnName>
                     </S.Column>
@@ -128,6 +147,7 @@ export const Users: React.FC = () => {
                             <S.Value>{user.email}</S.Value>
                             <S.Value>{user.phone}</S.Value>
                             <S.Value>{user.password}</S.Value>
+                            <S.Value>{formatDate(user.birthDate)}</S.Value>
                             <S.Value>{user.weeklyCalories?.toFixed(2)}</S.Value>
                             <S.Actions>
                                 <button onClick={() => { setSelectedUser(user); handleOptionsClick(index); }}>⋮</button>
