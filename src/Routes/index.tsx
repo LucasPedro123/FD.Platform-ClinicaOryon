@@ -7,6 +7,7 @@ import { LoggedIn } from '../Context/LoggedIn.context';
 import { Error } from '../Pages/Error/Error.page';
 import { Database } from '../Pages/Database/Database.page';
 import { EmailDetails } from '../Pages/EmailDetals/EmailDetails.page';
+import { Notifications } from '../Pages/Notifications/Notifications.page';
 
 const AppRouter: React.FC = () => {
     const context = useContext(LoggedIn);
@@ -19,6 +20,7 @@ const AppRouter: React.FC = () => {
             <Route path="/EmailMarketing" element={context?.loggedIn ? <Email /> :<Navigate to="/unauthorized" />} />
             <Route path="/EmailMarketing/:id" element={context?.loggedIn ? <EmailDetails /> : <Navigate to="/unauthorized" />} /> {/* Nova rota parametrizada */}
             <Route path="/Database" element={context?.loggedIn ? <Database /> :<Navigate to="/unauthorized" />} />
+            <Route path="/Notifications" element={context?.loggedIn ? <Notifications /> :<Navigate to="/unauthorized" />} />
             <Route path="*" element={<Error typeError="404"/>} />
         </Routes>
     );
