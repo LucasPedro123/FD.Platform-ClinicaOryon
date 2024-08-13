@@ -73,23 +73,30 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
             const userToDelete = userCredential.user;
-
+    
             await deleteUser(userToDelete);
             console.log(`Successfully deleted user with ID: ${user.userId}`);
-
+    
             if (user.firestoreId) {
                 await deleteDoc(doc(db, 'users', user.firestoreId));
-                await deleteDoc(doc(db, 'users', user.firestoreId, 'foods'));
+    
+                const foodsQuery = query(collection(db, 'users', user.firestoreId, 'foods'));
+                const foodDocs = await getDocs(foodsQuery);
+                foodDocs.forEach(async (foodDoc) => {
+                    await deleteDoc(foodDoc.ref);
+                });
             }
-
+    
             setUsers((prevUsers) => prevUsers.filter((u) => u.userId !== user.userId));
             toast.success('Usuário deletado com sucesso');
-
+    
             const imageRef = ref(storage, `profile_pictures/${user.userId}.jpg`);
-            if (imageRef) {
+            try {
                 await deleteObject(imageRef);
+            } catch (storageError) {
+                console.log('No profile picture found for user, or it could not be deleted.', storageError);
             }
-
+    
         } catch (error) {
             console.error('Error deleting user:', error);
             toast.error('Error deleting user.');
