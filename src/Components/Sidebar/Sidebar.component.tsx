@@ -8,20 +8,23 @@ export interface IlinkProps {
     emailLink: boolean;
     usersLink: boolean;
     databaseLink: boolean;
+    notificationsLink: boolean;
 }
 
 export const Sidebar: React.FC = () => {
-    const [link, setLink] = useState<IlinkProps>({ emailLink: false, usersLink: false, databaseLink: false });
+    const [link, setLink] = useState<IlinkProps>({ emailLink: false, usersLink: false, databaseLink: false, notificationsLink: false });
     const location = useLocation();
     const context = useContext(LoggedIn)
 
     useEffect(() => {
         if (location.pathname === "/Users") {
-            setLink({ emailLink: false, usersLink: true, databaseLink: false });
+            setLink({ emailLink: false, usersLink: true, databaseLink: false,  notificationsLink: false  });
         } else if (location.pathname === "/EmailMarketing") {
-            setLink({ emailLink: true, usersLink: false, databaseLink: false });
+            setLink({ emailLink: true, usersLink: false, databaseLink: false,  notificationsLink: false  });
         } else if (location.pathname === "/Database") {
-            setLink({ emailLink: false, usersLink: false, databaseLink: true });
+            setLink({ emailLink: false, usersLink: false, databaseLink: true,  notificationsLink: false  });
+        } else if (location.pathname === "/Notifications") {
+            setLink({ emailLink: false, usersLink: false, databaseLink: false,  notificationsLink: true  });
         }
     }, [location]);
 
@@ -52,11 +55,17 @@ export const Sidebar: React.FC = () => {
                         <S.SidebarText active={link.databaseLink}>Database</S.SidebarText>
                     </S.SidebarItem>
                 </Link>
+                <Link to='/Notifications' style={{ textDecoration: 'none' }}>
+                    <S.SidebarItem active={link.notificationsLink}>
+                        <i className="fa-solid fa-bell" style={{ color: link.notificationsLink == true ? 'white' : 'black', fontSize: '1.3em' }}></i>
+                        <S.SidebarText active={link.notificationsLink}>Notificação</S.SidebarText>
+                    </S.SidebarItem>
+                </Link>
             </S.SidebarContent>
             <S.Footer>
                 <S.FooterContent href="/">
                     <i className="fa-solid fa-right-from-bracket"></i>
-                    <S.SidebarFooterText onClick={()=>{context?.handleLogin(false) }}>Sair</S.SidebarFooterText>
+                    <S.SidebarFooterText onClick={() => { context?.handleLogin(false) }}>Sair</S.SidebarFooterText>
                 </S.FooterContent>
             </S.Footer>
         </S.SidebarContainer>
