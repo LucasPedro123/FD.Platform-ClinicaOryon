@@ -116,7 +116,7 @@ export const Head = styled.thead`
         left: 0; 
         width: 100%; 
         height: 1px; 
-        background: ${STYLE_GUIDE.color.grayLight}; 
+        background: #e1e1e1; 
     }
 `;
 

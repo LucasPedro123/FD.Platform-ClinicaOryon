@@ -89,8 +89,18 @@ width: 100%;
 `;
 
 export const Head = styled.thead`
-width: 100%;
-
+    width: 100%;
+    position: relative; 
+    
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 1px; 
+        background: #e1e1e1; 
+    }
 `;
 
 export const Actions = styled.td`
