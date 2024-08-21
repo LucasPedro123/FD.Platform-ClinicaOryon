@@ -72,7 +72,7 @@ export const Notifications: React.FC = () => {
                         <S.Content>
                             <S.NotificationsData>{notification.date}</S.NotificationsData>
                             <S.NotificationsTitle>{notification.title}</S.NotificationsTitle>
-                            <S.NotificationsContent>{notification.content}</S.NotificationsContent>
+                            <S.NotificationsContent>{notification.content.slice(0, 100) + '...'}</S.NotificationsContent>
                         </S.Content>
                         <S.WrapperButton>
                             <S.ButtonDel onClick={() => {
