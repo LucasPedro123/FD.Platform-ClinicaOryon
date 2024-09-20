@@ -67,3 +67,10 @@ export interface NotificationsContextProps {
     editNotification: (id: string, updatedNotification: Omit<Notification, 'id'>) => void;
     deleteNotification: (id: string) => void;
 }
+
+export interface IlinkProps {
+    emailLink: boolean;
+    usersLink: boolean;
+    databaseLink: boolean;
+    notificationsLink: boolean;
+}
