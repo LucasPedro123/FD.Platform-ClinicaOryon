@@ -166,6 +166,7 @@ export const Database: React.FC = () => {
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        zIndex: 999,
                     },
                     content: {
                         top: '50%',
@@ -174,7 +175,8 @@ export const Database: React.FC = () => {
                         bottom: 'auto',
                         marginRight: '-50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '400px',
+                        width: '90%', 
+                        maxWidth: '400px', 
                     },
                 }}
             >
@@ -227,6 +229,7 @@ export const Database: React.FC = () => {
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        zIndex: 999,
                     },
                     content: {
                         top: '50%',
@@ -235,7 +238,8 @@ export const Database: React.FC = () => {
                         bottom: 'auto',
                         marginRight: '-50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '400px',
+                        width: '90%', 
+                        maxWidth: '400px', 
                     },
                 }}
             >
@@ -288,6 +292,7 @@ export const Database: React.FC = () => {
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        zIndex: 999,
                     },
                     content: {
                         top: '50%',
@@ -296,7 +301,8 @@ export const Database: React.FC = () => {
                         bottom: 'auto',
                         marginRight: '-50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '400px',
+                        width: '90%', 
+                        maxWidth: '400px', 
                     },
                 }}
             >
