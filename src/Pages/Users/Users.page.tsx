@@ -24,7 +24,6 @@ export const Users: React.FC = () => {
     const optionsRef = useRef<HTMLDivElement>(null);
 
 
-    // Handler for clicking outside the options menu
     const handleClickOutside = (event: MouseEvent) => {
         if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
             setOptionsIsOpen(null);
@@ -144,11 +143,11 @@ export const Users: React.FC = () => {
                                 )}
                                 <p>{user.name}</p>
                             </S.LineProfile>
-                            <S.Value>{user.email}</S.Value>
-                            <S.Value>{user.phone}</S.Value>
-                            <S.Value>{user.password}</S.Value>
-                            <S.Value>{formatDate(user.birthDate)}</S.Value>
-                            <S.Value>{user.weeklyCalories?.toFixed(2)}</S.Value>
+                            <S.Value><span>Email:</span>{user.email}</S.Value>
+                            <S.Value><span>Telefone:</span>{user.phone}</S.Value>
+                            <S.Value><span>Senha:</span>{user.password}</S.Value>
+                            <S.Value><span>Data de nascimento:</span>{formatDate(user.birthDate)}</S.Value>
+                            <S.Value><span>Calorias:</span>{user.weeklyCalories?.toFixed(2)}</S.Value>
                             <S.Actions>
                                 <button onClick={() => { setSelectedUser(user); handleOptionsClick(index); }}>⋮</button>
                                 {
@@ -174,6 +173,7 @@ export const Users: React.FC = () => {
                 contentLabel="Confirm Delete"
                 style={{
                     overlay: {
+                        zIndex: 999,
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
                     },
                     content: {
@@ -183,9 +183,11 @@ export const Users: React.FC = () => {
                         bottom: 'auto',
                         marginRight: '-50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '450px',
+                        width: '90%', 
+                        maxWidth: '450px', 
                         padding: '20px',
                     },
+                    
                 }}
             >
                 <S.ModalTitle>Deseja excluir este usuário?</S.ModalTitle>
@@ -202,6 +204,7 @@ export const Users: React.FC = () => {
                 contentLabel="Confirm Delete"
                 style={{
                     overlay: {
+                        zIndex: 999,
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
                     },
                     content: {
@@ -212,9 +215,10 @@ export const Users: React.FC = () => {
                         bottom: 'auto',
                         marginRight: '-50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '450px',
+                        width: '90%', 
+                        maxWidth: '450px', 
                         padding: '20px',
-                        backgroundColor: '#fff', // Fundo opaco para o conteúdo do modal
+                        backgroundColor: '#fff',
                     },
                 }}
             >
