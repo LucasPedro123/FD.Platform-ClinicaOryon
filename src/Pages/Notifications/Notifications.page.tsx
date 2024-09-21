@@ -100,6 +100,7 @@ export const Notifications: React.FC = () => {
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        zIndex: 999,
                     },
                     content: {
                         top: '50%',
@@ -145,13 +146,13 @@ export const Notifications: React.FC = () => {
                 </S.Form>
             </Modal>
 
-            {/* Modal de Editar Notificação */}
             <Modal
                 isOpen={openisModalEdit}
                 onRequestClose={() => setOpenisModalEdit(false)}
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        zIndex: 999,
                     },
                     content: {
                         top: '50%',
@@ -197,13 +198,13 @@ export const Notifications: React.FC = () => {
                 </S.Form>
             </Modal>
 
-            {/* Modal de Excluir Notificação */}
             <Modal
                 isOpen={openisModalDelete}
                 onRequestClose={() => setOpenisModalDelete(false)}
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                        zIndex: 999,
                     },
                     content: {
                         top: '50%',

@@ -7,7 +7,9 @@ export const NotificationsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 223px;
+    @media (min-width: 1024px){
+        margin-left: 223px;
+    }
 `
 
 export const Title = styled.h1`
@@ -19,6 +21,10 @@ export const Title = styled.h1`
     color:${STYLE_GUIDE.color.primary};
 
     text-align: center;
+    
+    @media(max-width: 1023px){
+        font-size: 2rem;
+    }
 `
 
 
@@ -51,6 +57,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 22px;
+    align-items: center;
 `
 export const NotificationsCard = styled.div`
     width: 575px;
@@ -71,6 +78,10 @@ export const NotificationsCard = styled.div`
     &:hover{
         transform: scale(1.03);
         transform: translateY(-07px);
+    }
+    @media(max-width: 768px){
+        width: 90%;
+        gap: 20px;
     }
 `
 
@@ -141,6 +152,9 @@ export const Content = styled.div`
     display: flex;
     flex-direction: column;
     gap: 6px;
+    @media(max-width: 768px){
+        gap: 12px;
+    }
 `
 
 
