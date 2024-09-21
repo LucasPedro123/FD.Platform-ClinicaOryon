@@ -22,7 +22,7 @@ export const Overlay = styled.div<{ isOpen: boolean }>`
     transition: opacity 0.3s ease;
     opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
     pointer-events: ${({ isOpen }) => (isOpen ? 'auto' : 'none')};
-    z-index: 998;  
+    z-index: 995;  
 `;
 
 
@@ -37,7 +37,7 @@ export const SidebarContainer = styled.div<SidebarContainer>`
     flex-direction: column;
     align-items: center;
     transition: transform 0.3s ease;
-    z-index: 999;
+    z-index: 996;
     
     @media (max-width: 1023px) {
         transform: ${({ isOpen }) => (isOpen ? "translateX(0)" : "translateX(-200%)")}; 
