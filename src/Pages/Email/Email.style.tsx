@@ -7,7 +7,9 @@ export const EmailContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 223px;
+    @media (min-width: 1024px){
+        margin-left: 223px;
+    }
 `
 
 export const EmailTitle = styled.h1`
@@ -20,16 +22,21 @@ export const EmailTitle = styled.h1`
 
     margin-top: 30px;
     margin-bottom: 30px;
+
+    @media(max-width: 1023px){
+        font-size: 20px;
+    }
 `
 export const EmailItems = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
     gap: 34px;
-    
 `
 export const EmailItem = styled.div`
     width: 575px;
-    height: 100%;;
+    height: 100%;
     background: #EDEDED;
     box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.25);
     border-radius: 12px;
@@ -45,15 +52,34 @@ export const EmailItem = styled.div`
         transform: scale(1.03);
         transform: translateY(-07px);
     }
+
+    @media(max-width: 1023px){
+        gap: 30px;
+    }
+    @media(max-width: 768px){
+        width: 448px;
+    }
+    @media(max-width: 520px){
+        width: 268px;
+    }
+    @media(max-width: 316px){
+        width: 198px;
+    }
 `
 
 export const EmailWrapper = styled.div`
     display: flex;
-    gap: 24px;
+    gap: 20px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+    }
 `
 export const EmailContent = styled.div`
     display: flex;
+    gap: 15px;
     flex-direction: column;
+    padding-inline: 5px;
 `
 
 
@@ -84,8 +110,6 @@ export const EmailImage = styled.img`
 `
 
 export const EmailButton = styled.button`
-
-
     width: 274px;
     height: 30px;
     background: ${STYLE_GUIDE.color.secondary};
@@ -99,6 +123,10 @@ export const EmailButton = styled.button`
 
     &:hover{
         background: #6A5490;
+    }
+
+    @media(max-width: 1023px){
+        width: 90%;
     }
 
 `
