@@ -3,19 +3,25 @@ import { STYLE_GUIDE } from "../../assets/Style/global";
 
 export const Container = styled.div`
 margin-top: 100px;
-    margin-left: 223px;
     width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 70px;
+    @media (min-width: 1024px){
+        margin-left: 223px;
+    }
 `
 
 export const Wrapper = styled.div`
     display: flex;
     gap: 44px;
+    @media(max-width: 768px){
+        flex-direction: column;
+        align-items: center;
+    }
 `
-    
+
 export const SearchInput = styled.div`
     border: 1px solid #C4C4C4;
     border-radius: 8px;
@@ -25,13 +31,16 @@ export const SearchInput = styled.div`
     align-items: center;
     gap: 13px;
     padding-left: 22px;
+    @media(max-width: 768px){
+        width: 100%;
+    }
 `
-    
+
 export const Input = styled.input`
     outline: none;
     border: none;
     width: 90%;
-    
+ 
     
 `
 export const Icon = styled.i`
@@ -55,6 +64,9 @@ export const Button = styled.button`
 
 export const Table = styled.table`
     width: 70%;
+    @media(max-width: 768px){
+        width: 90%;
+    }
 `;
 
 export const Column = styled.tr`
@@ -66,20 +78,39 @@ export const ColumnName = styled.th`
     font-family: 'Roboto';
     font-weight: 600;
     font-size: 14px;
-    line-height: 16px;
-    letter-spacing: 0.01em;
     color: #7D7D7D;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+
+    @media (max-width: 480px) {
+        display: none; 
+    }
 `;
 
 export const Value = styled.td`
+    padding-block: 8px;
     font-family: 'Roboto';
     font-weight: 400;
-    font-size: 12px;
-    line-height: 12px;
-    letter-spacing: 0.01em;
+    font-size: 1rem;
     color: #7D7D7D;
-    padding-top: 20px;
+    padding-block: 20px;
+
+    span{
+        display: none;
+    }
+    @media (max-width: 768px) {
+        font-size: 10px;
+    }
+
+    @media (max-width: 480px) {
+        span{
+            display: flex;
+        }
+    }
 `;
+
 
 export const Line = styled.tr`
 `;
@@ -105,12 +136,11 @@ export const Head = styled.thead`
 
 export const Actions = styled.td`
     position: relative;
-    padding-top: 20px;
 
     button {
         background: none;
         border: none;
-        font-size: 24px;
+        font-size: 1.5rem;
         cursor: pointer;
 
         &:hover {
