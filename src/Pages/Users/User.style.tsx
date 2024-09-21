@@ -8,21 +8,38 @@ export const UserContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media (min-width: 1024px) {
+        margin-left: 223px;
+    }
 `;
 
 export const Table = styled.table`
-    width: 70%;
-    margin-left: 223px; 
+    width: 100%;
+    max-width: 1000px; 
+    margin: 0 auto; 
+    align-self: center;
+
+    @media (max-width: 1023px) {
+        width: 90%; 
+    }
+  
+
+    @media (min-width: 1024px) {
+        width: 70%;
+    }
 `;
+
 
 export const UsersWrapper = styled.div`
     margin-block: 40px;
-    margin-left: 223px;
+    margin-left: 0px; 
     padding: 0 20px; 
-
     display: flex;
     flex-direction: column;
     gap: 30px;
+
+    
 `;
 
 export const UserLabel = styled.p`
@@ -68,9 +85,15 @@ export const ColumnName = styled.th`
     font-family: 'Roboto';
     font-weight: 600;
     font-size: 14px;
-    line-height: 16px;
-    letter-spacing: 0.01em;
     color: #7D7D7D;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+
+    @media (max-width: 480px) {
+        display: none; 
+    }
 `;
 
 export const Value = styled.td`
@@ -78,10 +101,25 @@ export const Value = styled.td`
     font-family: 'Roboto';
     font-weight: 400;
     font-size: 12px;
-    line-height: 12px;
-    letter-spacing: 0.01em;
     color: #7D7D7D;
+
+    span{
+        display: none;
+        font-weight: 700;
+    }
+    @media (max-width: 768px) {
+        font-size: 10px;
+    }
+
+    @media (max-width: 480px) {
+        display: flex;
+        gap: 10px;
+        span{
+            display: flex;
+        }
+    }
 `;
+
 
 export const Line = styled.tr`
 `;
