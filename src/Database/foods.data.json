@@ -8186,7 +8186,8 @@
       {
         "id": 1365,
         "name": "Refrigerantes Diet e Light",
-        "portion": "não contam calorias"
+        "portion": "não contam calorias",
+        "calories": 0
       },
       {
         "id": 1366,
