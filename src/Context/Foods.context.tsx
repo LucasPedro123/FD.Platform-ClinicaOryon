@@ -9,10 +9,11 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [allFoodItems, setAllFoodItems] = useState<Food[]>([]);
     const [foodItems, setFoodItems] = useState<Food[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const apiUrl = 'https://server-clinicaoryon-gqbbdugca4ckb8bh.canadacentral-01.azurewebsites.net/api'
 
     const fetchFoodItems = async () => {
         try {
-            const response = await axios.get('https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods');
+            const response = await axios.get(`${apiUrl}/foods`);
             setAllFoodItems(response.data);
         } catch (error) {
             console.error('Error fetching food items:', error);
@@ -38,11 +39,9 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const addFoodItem = async (newFood: Food) => {
         try {
-            // Adiciona o alimento no banco de dados do servidor
-            const response = await axios.post('https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods', newFood);
+            const response = await axios.post(`${apiUrl}/foods`, newFood);
             const foodWithId = { ...newFood, id: response.data._id };
     
-            // Atualiza o estado local com o novo alimento
             setAllFoodItems(prevFoods => [...prevFoods, foodWithId]);
             setFoodItems(prevFoods => [...prevFoods, foodWithId]);
         } catch (error) {
@@ -53,11 +52,9 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const updateFoodItem = async (updatedFood: Food) => {
         try {
-            // Atualiza o alimento no banco de dados do servidor
-            await axios.put(`https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods/${updatedFood.id}`, updatedFood);
+            await axios.put(`${apiUrl}/foods/${updatedFood.id}`, updatedFood);
             
             console.log(updatedFood)
-            // Atualiza o estado local com o alimento atualizado
             setAllFoodItems(prevFoods =>
                 prevFoods.map(food => (food.id === updatedFood.id ? updatedFood : food))
             );
@@ -75,10 +72,8 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const deleteFoodItem = async (foodId:number ) => {
         try {
-            // Remove o alimento do banco de dados do servidor
-            await axios.delete(`https://serverfood-egctccaegffdbway.eastus-01.azurewebsites.net/api/foods/${foodId}`);
+            await axios.delete(`${apiUrl}/foods/${foodId}`);
     
-            // Atualiza o estado local removendo o alimento
             setAllFoodItems(prevFoods => prevFoods.filter(food => food._id !== foodId));
             setFoodItems(prevFoods => prevFoods.filter(food => food._id !== foodId));
         } catch (error) {
