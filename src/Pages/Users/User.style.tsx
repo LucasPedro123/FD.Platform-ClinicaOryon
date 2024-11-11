@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { STYLE_GUIDE } from "../../assets/Style/global";
 
 export const UserContainer = styled.div`
-    width: 100vw;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -76,7 +76,9 @@ export const UserLength = styled.h1`
 
 export const Column = styled.tr`
 
-    
+    @media screen and (max-width: 768px){
+        display: none;
+    }
 `;
 
 export const ColumnName = styled.th`
@@ -102,26 +104,30 @@ export const Value = styled.td`
     font-weight: 400;
     font-size: 12px;
     color: #7D7D7D;
-
+    
     span{
         display: none;
         font-weight: 700;
-    }
-    @media (max-width: 768px) {
         font-size: 10px;
     }
-
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
         display: flex;
         gap: 10px;
         span{
-            display: flex;
+            display: contents;
         }
     }
 `;
 
 
 export const Line = styled.tr`
+    @media screen and (max-width: 768px){
+        position: relative;
+        display: grid;
+        grid-template-columns: auto;
+        gap: 15px;
+        
+    }
 `;
 
 export const LineProfile = styled.td`
@@ -129,7 +135,6 @@ export const LineProfile = styled.td`
     display: flex;
     align-items: center;
     gap: 12px;
-
     p {
         font-family: 'Roboto';
         font-weight: 500;
@@ -140,7 +145,12 @@ export const LineProfile = styled.td`
 `;
 
 export const Body = styled.tbody`
-width: 100%;
+    width: 100%;
+    @media screen and (max-width: 768px){
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-gap: 16px; 
+    }
 `;
 
 export const Head = styled.thead`
@@ -160,7 +170,7 @@ export const Head = styled.thead`
 
 export const Actions = styled.td`
     position: relative;
-
+    
     button {
         background: none;
         border: none;
@@ -170,6 +180,11 @@ export const Actions = styled.td`
         &:hover {
             color: ${STYLE_GUIDE.color.secondary}; 
         }
+    }
+    @media screen and (max-width: 768px){
+        position: absolute;
+        top: 5%;
+        left: 250px;
     }
 `;
 export const ModalTitle = styled.h2`

@@ -143,11 +143,11 @@ export const Users: React.FC = () => {
                                 )}
                                 <p>{user.name}</p>
                             </S.LineProfile>
-                            <S.Value><span>Email:</span>{user.email}</S.Value>
-                            <S.Value><span>Telefone:</span>{user.phone}</S.Value>
-                            <S.Value><span>Senha:</span>{user.password}</S.Value>
-                            <S.Value><span>Data de nascimento:</span>{formatDate(user.birthDate)}</S.Value>
-                            <S.Value><span>Calorias:</span>{user.weeklyCalories?.toFixed(2)}</S.Value>
+                            <S.Value><span>Email:</span><p>{user.email}</p></S.Value>
+                            <S.Value><span>Telefone:</span><p>{user.phone}</p></S.Value>
+                            <S.Value><span>Senha:</span><p>{user.password}</p></S.Value>
+                            <S.Value><span>Data de nascimento:</span><p>{formatDate(user.birthDate)}</p></S.Value>
+                            <S.Value><span>Calorias:</span><p>{user.weeklyCalories?.toFixed(2)}</p></S.Value>
                             <S.Actions>
                                 <button onClick={() => { setSelectedUser(user); handleOptionsClick(index); }}>⋮</button>
                                 {
