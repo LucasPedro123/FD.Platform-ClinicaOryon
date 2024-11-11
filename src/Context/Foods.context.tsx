@@ -9,7 +9,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [allFoodItems, setAllFoodItems] = useState<Food[]>([]);
     const [foodItems, setFoodItems] = useState<Food[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const apiUrl = 'https://server-clinicaoryon-gqbbdugca4ckb8bh.canadacentral-01.azurewebsites.net/api'
+    const apiUrl = import.meta.env.REACT_APP_API_URL;
 
     const fetchFoodItems = async () => {
         try {
