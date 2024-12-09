@@ -126,7 +126,6 @@ export const Users: React.FC = () => {
                         <S.ColumnName>Users</S.ColumnName>
                         <S.ColumnName>Email</S.ColumnName>
                         <S.ColumnName>Telefone</S.ColumnName>
-                        <S.ColumnName>Senha</S.ColumnName>
                         <S.ColumnName>Data de Nascimento</S.ColumnName>
                         <S.ColumnName>Calorias Semanais</S.ColumnName>
                         <S.ColumnName></S.ColumnName>
@@ -145,7 +144,6 @@ export const Users: React.FC = () => {
                             </S.LineProfile>
                             <S.Value><span>Email:</span><p>{user.email}</p></S.Value>
                             <S.Value><span>Telefone:</span><p>{user.phone}</p></S.Value>
-                            <S.Value><span>Senha:</span><p>{user.password}</p></S.Value>
                             <S.Value><span>Data de nascimento:</span><p>{formatDate(user.birthDate)}</p></S.Value>
                             <S.Value><span>Calorias:</span><p>{user.weeklyCalories?.toFixed(2)}</p></S.Value>
                             <S.Actions>
