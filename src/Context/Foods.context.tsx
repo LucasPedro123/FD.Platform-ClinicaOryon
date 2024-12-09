@@ -13,7 +13,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const fetchFoodItems = async () => {
         try {
-            const response = await axios.get(`${apiUrl}/foods`);
+            const response = await axios.get(`https://server-clinicaoryon-gqbbdugca4ckb8bh.canadacentral-01.azurewebsites.net/api/foods`);
             setAllFoodItems(response.data);
         } catch (error) {
             console.error('Error fetching food items:', error);

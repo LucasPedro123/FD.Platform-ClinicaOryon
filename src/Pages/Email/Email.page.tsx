@@ -13,7 +13,7 @@ import { EmailSendContext } from "../../Context/EmailsSend.context";
 const Email: React.FC = () => {
     const context = useContext(EmailSendContext);
     const emailSendValue = context?.emailSend;
-   
+
 
     const sendEmail = (emailData: IEmailProps) => {
         const getUsersFromFirestore = async () => {
@@ -36,6 +36,7 @@ const Email: React.FC = () => {
                                 console.log('FAILED...', err);
                                 toast.error("Falha ao enviar E-mail")
                             });
+                        toast.success("Email enviado com sucesso")
                     }
                 });
                 return toast.success("Email enviado com sucesso");
@@ -53,7 +54,7 @@ const Email: React.FC = () => {
         <S.EmailContainer>
             <S.EmailTitle>EMAIL MARKETING</S.EmailTitle>
             <S.EmailItems>
-                {emailSendValue &&emailSendValue.map((e: IEmailProps) => {
+                {emailSendValue && emailSendValue.map((e: IEmailProps) => {
                     return (
                         <Link
                             to={`/EmailMarketing/${e.id}`}

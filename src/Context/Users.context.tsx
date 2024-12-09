@@ -71,10 +71,6 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const deleteUserAccount = async (user: IUser) => {
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
-            const userToDelete = userCredential.user;
-    
-            await deleteUser(userToDelete);
             console.log(`Successfully deleted user with ID: ${user.userId}`);
     
             if (user.firestoreId) {
@@ -86,6 +82,11 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                     await deleteDoc(foodDoc.ref);
                 });
             }
+
+            const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
+            const userToDelete = userCredential.user;
+    
+            await deleteUser(userToDelete);
     
             setUsers((prevUsers) => prevUsers.filter((u) => u.userId !== user.userId));
             toast.success('Usuário deletado com sucesso');

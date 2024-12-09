@@ -3,6 +3,8 @@ import * as S from './Notifications.style';
 import Modal from 'react-modal';
 import { ClipLoader } from 'react-spinners';
 import { NotificationsContext } from '../../Context/Notifications.context';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../Services/fireConfig';
 
 export const Notifications: React.FC = () => {
     const context = useContext(NotificationsContext);
@@ -22,6 +24,16 @@ export const Notifications: React.FC = () => {
 
     const handleAddNotification = async () => {
         setLoading(true);
+         // Buscar tokens de usuários
+         const tokens = await fetchUserTokens();
+    
+         if (tokens.length > 0) {
+             await sendNotification(tokens, newNotificationTitle, newNotificationContent);
+             console.log("Notificação enviada para todos os tokens.");
+         } else {
+             console.warn("Nenhum token encontrado para envio de notificações.");
+         }
+
         await context?.addNotification({
             title: newNotificationTitle,
             content: newNotificationContent,
@@ -58,6 +70,58 @@ export const Notifications: React.FC = () => {
             setSelectedNotification(null);
         }
     };
+
+    const fetchUserTokens = async (): Promise<string[]> => {
+        try {
+            const usersSnapshot = await getDocs(collection(db, "users"));
+            const tokens: string[] = [];
+            usersSnapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.token) { 
+                    tokens.push(data.token);
+                }
+            });
+            console.log(tokens)
+            return tokens;
+        } catch (error) {
+            console.error("Erro ao buscar tokens:", error);
+            return [];
+        }
+    };
+
+
+    const sendNotification = async (tokens: string[], title: string, body: string) => {
+        const serverKey = "60JfNKP79CK8elpgBLmeloW4MCzaeixwhJfnbSKXmP0"; 
+        const payload = {
+            registration_ids: tokens,
+            notification: {
+                title,
+                body,
+            },
+        };
+    
+        try {
+            const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `key=${serverKey}`,
+                },
+                body: JSON.stringify(payload),
+            });
+    
+            if (!response.ok) {
+                console.error("Erro ao enviar notificações:", await response.text());
+            } else {
+                console.log("Notificações enviadas com sucesso!");
+            }
+        } catch (error) {
+            console.error("Erro na requisição FCM:", error);
+        }
+    };
+
+    
+    
 
     return (
         <S.NotificationsContainer>
