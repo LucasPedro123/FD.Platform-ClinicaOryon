@@ -9,11 +9,11 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [allFoodItems, setAllFoodItems] = useState<Food[]>([]);
     const [foodItems, setFoodItems] = useState<Food[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const apiUrl = 'https://server-clinicaoryon-gqbbdugca4ckb8bh.canadacentral-01.azurewebsites.net/api/foods';
+    const apiUrl = 'https://server-clinicaoryon-gqbbdugca4ckb8bh.canadacentral-01.azurewebsites.net/api/';
 
     const fetchFoodItems = async () => {
         try {
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(`${apiUrl}/foods`);
             setAllFoodItems(response.data);
         } catch (error) {
             console.error('Error fetching food items:', error);
