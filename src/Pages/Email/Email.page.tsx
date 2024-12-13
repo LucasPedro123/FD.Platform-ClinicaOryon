@@ -34,12 +34,10 @@ const Email: React.FC = () => {
                             })
                             .catch((err) => {
                                 console.log('FAILED...', err);
-                                toast.error("Falha ao enviar E-mail")
                             });
-                        toast.success("Email enviado com sucesso")
                     }
                 });
-                return toast.success("Email enviado com sucesso");
+                toast.success("Email enviado com sucesso")
             } catch (error) {
                 console.error('Error fetching users:', error);
                 toast.error('Erro ao buscar usuários.');
@@ -56,13 +54,13 @@ const Email: React.FC = () => {
             <S.EmailItems>
                 {emailSendValue && emailSendValue.map((e: IEmailProps) => {
                     return (
-                        <Link
-                            to={`/EmailMarketing/${e.id}`}
-                            style={{
-                                textDecoration: 'none',
-                            }}
-                        >
-                            <S.EmailItem key={e.id}>
+                        <S.EmailItem key={e.id}>
+                            <Link
+                                to={`/EmailMarketing/${e.id}`}
+                                style={{
+                                    textDecoration: 'none',
+                                }}
+                            >
                                 <S.EmailWrapper>
                                     <S.EmailImage src={e.image} alt="email" />
                                     <S.EmailContent>
@@ -71,11 +69,11 @@ const Email: React.FC = () => {
                                         <S.EmailContentLabel>{e.label}</S.EmailContentLabel>
                                     </S.EmailContent>
                                 </S.EmailWrapper>
-                                <S.EmailButton onClick={() => sendEmail(e)}>
-                                    Enviar
-                                </S.EmailButton>
-                            </S.EmailItem>
-                        </Link>
+                            </Link>
+                            <S.EmailButton onClick={() => sendEmail(e)}>
+                                Enviar
+                            </S.EmailButton>
+                        </S.EmailItem>
                     )
                 })}
             </S.EmailItems>
