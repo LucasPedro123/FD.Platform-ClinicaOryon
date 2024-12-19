@@ -9,13 +9,13 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [allFoodItems, setAllFoodItems] = useState<Food[]>([]);
     const [foodItems, setFoodItems] = useState<Food[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const apiUrl = 'https://food-data-json-bm8g.vercel.app/api';
-    console.log('Fetching foods from: ', `${apiUrl}/foods`);
+    const apiUrl = 'https://food-data-json-bm8g.vercel.app/api/foods';
+    console.log('Fetching foods from: ', `${apiUrl}`);
 
 
     const fetchFoodItems = async () => {
         try {
-            const response = await axios.get(`${apiUrl}/foods`);
+            const response = await axios.get(`${apiUrl}`);
             setAllFoodItems(response.data);
         } catch (error) {
             console.error('Error fetching food items:', error);
@@ -41,7 +41,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const addFoodItem = async (newFood: Food) => {
         try {
-            const response = await axios.post(`${apiUrl}/foods`, newFood);
+            const response = await axios.post(`${apiUrl}`, newFood);
             const foodWithId = { ...newFood, id: response.data._id };
     
             setAllFoodItems(prevFoods => [...prevFoods, foodWithId]);
@@ -54,7 +54,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const updateFoodItem = async (updatedFood: Food) => {
         try {
-            await axios.put(`${apiUrl}/foods/${updatedFood.id}`, updatedFood);
+            await axios.put(`${apiUrl}/${updatedFood.id}`, updatedFood);
             
             console.log(updatedFood)
             setAllFoodItems(prevFoods =>
@@ -74,7 +74,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const deleteFoodItem = async (foodId:number ) => {
         try {
-            await axios.delete(`${apiUrl}/foods/${foodId}`);
+            await axios.delete(`${apiUrl}/${foodId}`);
     
             setAllFoodItems(prevFoods => prevFoods.filter(food => food._id !== foodId));
             setFoodItems(prevFoods => prevFoods.filter(food => food._id !== foodId));
