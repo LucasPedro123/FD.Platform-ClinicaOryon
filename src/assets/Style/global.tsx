@@ -1,5 +1,6 @@
 export const STYLE_GUIDE = {
     color: {
+        alert: '#FF4D4D',
         primary: '#080A40',
         secondary: '#836BA9',
         grayLight: '#F1F1F1',
