@@ -1,102 +1,138 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode,  useMemo } from 'react';
-import axios from 'axios';
-import { Food, FoodContextType } from '../Interfaces/web.interfaces';
-import { toast } from 'react-toastify';
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import axios from "axios";
+import { Category, Food, FoodContextType } from "../Interfaces/web.interfaces";
+import { toast } from "react-toastify";
 
 const FoodContext = createContext<FoodContextType | undefined>(undefined);
 
+const apiUrl = "https://food-data-json.vercel.app/api";
+
 const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [allFoodItems, setAllFoodItems] = useState<Food[]>([]);
-    const [foodItems, setFoodItems] = useState<Food[]>([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const apiUrl = 'https://food-data-json-bm8g.vercel.app/api/foods';
-    console.log('Fetching foods from: ', `${apiUrl}/foods`);
+  const [foodItems, setFoodItems] = useState<Food[]>([]);
+  const [categories, setCategories] = useState<string[] | undefined>();
+  const [searchTerm, setSearchTerm] = useState("");
 
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/categories`);
+      const data = response.data;
+      setCategories(data);
+    } catch (err) {
+      console.log("Erro ao carregar categorias: ", err);
+    }
+  };
 
-    const fetchFoodItems = async () => {
-        try {
-            const response = await axios.get(`${apiUrl}`);
-            setAllFoodItems(response.data);
-        } catch (error) {
-            console.error('Error fetching food items:', error);
-        }
-    };
+  const addCategory = async (newCategory: Category): Promise<void> => {
+    try {
+      await axios.post(`${apiUrl}/categories`, newCategory);
+      toast.success("Categoria adicionada com sucesso!");
+    } catch (err) {
+      console.error("Erro ao adicionar categoria:", err);
+      toast.error("Erro ao adicionar categoria!");
+      throw err;
+    }
+  };
 
-    useEffect(() => {
-        fetchFoodItems();
-    }, []);
+  const updateCategory = async (
+    categoryId: string,
+    updatedCategory: Category
+  ): Promise<void> => {
+    try {
+      await axios.put(`${apiUrl}/categories/${categoryId}`, updatedCategory);
+      toast.success("Categoria atualizada com sucesso!");
+    } catch (err) {
+      console.error("Erro ao atualizar categoria:", err);
+      toast.error("Erro ao atualizar categoria!");
+      throw err;
+    }
+  };
 
-    const filteredFoods = useMemo(() => {
-        if (searchTerm) {
-            return allFoodItems.filter(food =>
-                food.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        }
-        return allFoodItems;
-    }, [searchTerm, allFoodItems]);
+  const deleteCategory = async (categoryId: string): Promise<void> => {
+    try {
+      await axios.delete(`${apiUrl}/categories/${categoryId}`);
+      toast.success("Categoria removida com sucesso!");
+    } catch (err) {
+      console.error("Erro ao remover categoria:", err);
+      toast.error("Erro ao remover categoria!");
+      throw err;
+    }
+  };
 
-    useEffect(() => {
-        setFoodItems(filteredFoods);
-    }, [filteredFoods]);
+  const fetchFoodItems = async (category: string) => {
+    try {
+      const response = await axios.get(`${apiUrl}/categories/${category}`);
+      setFoodItems(response.data);
+    } catch (error) {
+      console.error("Error fetching food items:", error);
+    }
+  };
 
-    const addFoodItem = async (newFood: Food) => {
-        try {
-            const response = await axios.post(`${apiUrl}`, newFood);
-            const foodWithId = { ...newFood, id: response.data._id };
-    
-            setAllFoodItems(prevFoods => [...prevFoods, foodWithId]);
-            setFoodItems(prevFoods => [...prevFoods, foodWithId]);
-        } catch (error) {
-            console.error('Error adding document: ', error);
-        }
-    };
-    
+  const addFoodItem = async (category: string, newFood: Food) => {
+    try {
+      await axios.post(`${apiUrl}/categories/${category}/items`, newFood);
+      setFoodItems((prevFoods) => [...prevFoods, newFood]);
+      toast.success("Alimento adicionado com sucesso!");
+    } catch (error) {
+      console.error("Error adding food item:", error);
+    }
+  };
 
-    const updateFoodItem = async (updatedFood: Food) => {
-        try {
-            await axios.put(`${apiUrl}/${updatedFood.id}`, updatedFood);
-            
-            console.log(updatedFood)
-            setAllFoodItems(prevFoods =>
-                prevFoods.map(food => (food.id === updatedFood.id ? updatedFood : food))
-            );
-            setFoodItems(prevFoods =>
-                prevFoods.map(food => (food.id === updatedFood.id ? updatedFood : food))
-            );
+  const updateFoodItem = async (category: string, updatedFood: Food) => {
+    try {
+      await axios.put(
+        `${apiUrl}/categories/${category}/items/${updatedFood.id}`,
+        updatedFood
+      );
+      setFoodItems((prevFoods) =>
+        prevFoods.map((food) =>
+          food.id === updatedFood.id ? updatedFood : food
+        )
+      );
+      toast.success("Alimento atualizado com sucesso!");
+    } catch (error) {
+      console.error("Error updating food item:", error);
+    }
+  };
 
-            toast.success('Food item updated successfully!');
-
-        } catch (error) {
-            console.error('Error updating document: ', error);
-        }
-    };
-    
-
-    const deleteFoodItem = async (foodId:number ) => {
-        try {
-            await axios.delete(`${apiUrl}/${foodId}`);
-    
-            setAllFoodItems(prevFoods => prevFoods.filter(food => food._id !== foodId));
-            setFoodItems(prevFoods => prevFoods.filter(food => food._id !== foodId));
-        } catch (error) {
-            console.error('Error deleting document: ', error);
-        }
-    };
-    
-
-    return (
-        <FoodContext.Provider value={{ foodItems, searchTerm, setSearchTerm, fetchFoodItems, addFoodItem, updateFoodItem, deleteFoodItem }}>
-            {children}
-        </FoodContext.Provider>
-    );
+  const deleteFoodItem = async (category: string, foodId: number) => {
+    try {
+      await axios.delete(`${apiUrl}/categories/${category}/items/${foodId}`);
+      setFoodItems((prevFoods) =>
+        prevFoods.filter((food) => food.id !== foodId)
+      );
+      toast.success("Alimento removido com sucesso!");
+    } catch (error) {
+      console.error("Error deleting food item:", error);
+    }
+  };
+  return (
+    <FoodContext.Provider
+      value={{
+        categories,
+        foodItems,
+        searchTerm,
+        setSearchTerm,
+        fetchFoodItems,
+        fetchCategories,
+        addFoodItem,
+        updateFoodItem,
+        deleteFoodItem,
+        updateCategory,
+        deleteCategory,
+        addCategory,
+      }}
+    >
+      {children}
+    </FoodContext.Provider>
+  );
 };
 
 const useFoodContext = () => {
-    const context = useContext(FoodContext);
-    if (!context) {
-        throw new Error('useFoodContext must be used within a FoodProvider');
-    }
-    return context;
+  const context = useContext(FoodContext);
+  if (!context) {
+    throw new Error("useFoodContext must be used within a FoodProvider");
+  }
+  return context;
 };
 
 export { FoodProvider, useFoodContext };
