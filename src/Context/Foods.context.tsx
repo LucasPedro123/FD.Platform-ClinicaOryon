@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import axios from "axios";
-import { Category, Food, FoodContextType } from "../Interfaces/web.interfaces";
+import { Food, FoodContextType } from "../Interfaces/web.interfaces";
 import { toast } from "react-toastify";
 
 const FoodContext = createContext<FoodContextType | undefined>(undefined);
@@ -11,6 +11,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [foodItems, setFoodItems] = useState<Food[]>([]);
   const [categories, setCategories] = useState<string[] | undefined>();
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const fetchCategories = async () => {
     try {
@@ -22,9 +23,11 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const addCategory = async (newCategory: Category): Promise<void> => {
+  const addCategory = async (newCategory: string): Promise<void> => {
     try {
-      await axios.post(`${apiUrl}/categories`, newCategory);
+      await axios.post(`${apiUrl}/categories`, {
+        category: newCategory,
+      });
       toast.success("Categoria adicionada com sucesso!");
     } catch (err) {
       console.error("Erro ao adicionar categoria:", err);
@@ -34,11 +37,14 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const updateCategory = async (
-    categoryId: string,
-    updatedCategory: Category
+    currentCategory: string,
+    updatedCategory: string
   ): Promise<void> => {
     try {
-      await axios.put(`${apiUrl}/categories/${categoryId}`, updatedCategory);
+      await axios.put(`${apiUrl}/categories/${currentCategory}`, {
+        category: updatedCategory,
+      });
+      setSelectedCategory(updatedCategory);
       toast.success("Categoria atualizada com sucesso!");
     } catch (err) {
       console.error("Erro ao atualizar categoria:", err);
@@ -47,9 +53,9 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const deleteCategory = async (categoryId: string): Promise<void> => {
+  const deleteCategory = async (category: string): Promise<void> => {
     try {
-      await axios.delete(`${apiUrl}/categories/${categoryId}`);
+      await axios.delete(`${apiUrl}/categories/${category}`);
       toast.success("Categoria removida com sucesso!");
     } catch (err) {
       console.error("Erro ao remover categoria:", err);
@@ -110,6 +116,7 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       value={{
         categories,
         foodItems,
+        setFoodItems,
         searchTerm,
         setSearchTerm,
         fetchFoodItems,
@@ -120,6 +127,8 @@ const FoodProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         updateCategory,
         deleteCategory,
         addCategory,
+        selectedCategory,
+        setSelectedCategory,
       }}
     >
       {children}

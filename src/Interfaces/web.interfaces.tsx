@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface IUser {
   email: string;
   name: string;
@@ -28,6 +30,7 @@ export interface Category {
 export interface FoodContextType {
   categories: string[] | undefined;
   foodItems: Food[];
+  setFoodItems: Dispatch<SetStateAction<Food[]>>;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   fetchCategories: () => void;
@@ -35,9 +38,11 @@ export interface FoodContextType {
   updateFoodItem: (category: string, updatedFood: Food) => void;
   deleteFoodItem: (category: string, foodId: number) => void;
   addFoodItem: (category: string, food: Food) => void;
-  addCategory: (newCategory: Category) => Promise<void>;
-  updateCategory: (categoryId: string, updatedCategory: Category) => void;
+  addCategory: (newCategory: string) => Promise<void>;
+  updateCategory: (currentCategory: string, updatedCategory: string) => void;
   deleteCategory: (category: string) => Promise<void>;
+  selectedCategory: string;
+  setSelectedCategory: Dispatch<SetStateAction<string>>;
 }
 
 export interface UserContextType {
