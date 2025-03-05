@@ -73,7 +73,7 @@ export const CheckBox = styled.input.attrs({ type: "checkbox" })`
     background-size: 100%;
     background-position: center;
     display: block;
-    color: white;
+    color: ${STYLE_GUIDE.color.white};
     font-size: 14px;
     text-align: center;
   }
@@ -143,10 +143,10 @@ export const ButtonText = styled.p`
 
 export const Wrapper = styled.div`
   display: flex;
+  align-items: center;
   gap: 44px;
   @media (max-width: 768px) {
     flex-direction: column;
-    align-items: center;
   }
 `;
 
@@ -170,7 +170,12 @@ export const Input = styled.input`
   width: 90%;
 `;
 export const Icon = styled.i`
-  color: #c4c4c4;
+  color: ${STYLE_GUIDE.color.gray300};
+`;
+export const IconOperation = styled.i`
+  color: ${STYLE_GUIDE.color.secondary};
+  font-size: 24px;
+  cursor: pointer;
 `;
 
 export const Button = styled.button`
@@ -294,15 +299,15 @@ export const WrapperCategoryInfo = styled.div`
 
 export const IconTrash = styled.i`
   color: ${STYLE_GUIDE.color.alert};
-  &:hover{
-    cursor: pointer; 
+  &:hover {
+    cursor: pointer;
   }
 `;
 export const IconDarked = styled.i`
   color: ${STYLE_GUIDE.color.dark};
   font-size: 20px;
-  &:hover{
-    cursor: pointer; 
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -318,4 +323,10 @@ export const Select = styled.select`
   @media (max-width: 768px) {
     width: 100%;
   }
+`;
+
+
+export const IconsGroup = styled.div`
+  display: flex;
+  gap: 14px;
 `

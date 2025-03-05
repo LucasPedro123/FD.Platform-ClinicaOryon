@@ -20,11 +20,22 @@ export const Database: React.FC = () => {
     deleteFoodItem,
     addFoodItem,
     foodItems,
+    selectedCategory,
+    setSelectedCategory,
+    updateCategory,
+    deleteCategory,
+    addCategory,
+    setFoodItems
   } = useFoodContext();
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [categoyModalIsOpen, setCategoryModalIsOpen] = useState<boolean>(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
+  const [editCategoryModalIsOpen, setEditCategoryModalIsOpen] =
+    useState<boolean>(false);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState<boolean>(false);
+  const [deleteCategoryModalIsOpen, setDeleteCategoryModalIsOpen] =
+    useState<boolean>(false);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [newFood, setNewFood] = useState({
     id: 0,
@@ -33,8 +44,9 @@ export const Database: React.FC = () => {
     calories: 0,
   });
 
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [selectedCategoryItem, setSelectedCategoryItem] = useState<string>();
+  const [newCategory, setNewCategory] = useState<string>();
   const [loading, setLoading] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
   const [optionsIsOpen, setOptionsIsOpen] = useState<number | null>(null);
@@ -48,6 +60,7 @@ export const Database: React.FC = () => {
 
   useEffect(() => {
     fetchFoodItems(selectedCategory);
+    setSelectedCategoryItem(selectedCategory);
   }, [selectedCategory]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -59,7 +72,6 @@ export const Database: React.FC = () => {
   const handleEditFood = async () => {
     setLoading(true);
     if (!selectedFood || !selectedFood.id) return;
-    console.log("EDIT ", newFood);
     try {
       const updatedFood = {
         ...selectedFood,
@@ -67,13 +79,40 @@ export const Database: React.FC = () => {
         portion: newFood.portion,
         calories: Number(newFood.calories),
       };
-      updateFoodItem(selectedCategory, updatedFood);
-      setEditModalIsOpen(false);
+      await updateFoodItem(selectedCategory, updatedFood);
     } catch (error) {
       console.error("Error updating food item: ", error);
       toast.error("Error updating food item.");
     } finally {
       setLoading(false);
+      setEditModalIsOpen(false);
+    }
+  };
+
+  const handleAddCategoy = async () => {
+    setLoading(true);
+    if (!newCategory) return;
+    try {
+      await addCategory(newCategory);
+    } catch (error) {
+      console.error("Erro ao criar categoria: ", error);
+      toast.error("Erro ao criar categoria.");
+    } finally {
+      setLoading(false);
+      setCategoryModalIsOpen(false);
+    }
+  };
+  const handleEditCategoy = async () => {
+    setLoading(true);
+    if (!selectedCategoryItem) return;
+    try {
+      await updateCategory(selectedCategory, selectedCategoryItem);
+    } catch (error) {
+      console.error("Erro ao atualizar categoria: ", error);
+      toast.error("Erro ao atualizar categoria.");
+    } finally {
+      setLoading(false);
+      setEditCategoryModalIsOpen(false);
     }
   };
 
@@ -87,27 +126,33 @@ export const Database: React.FC = () => {
         portion: newFood.portion,
         calories: Number(newFood.calories),
       };
-      deleteFoodItem(selectedCategory, deletedFood.id);
-      setDeleteModalIsOpen(false);
+      await deleteFoodItem(selectedCategory, deletedFood.id);
     } catch (error) {
       console.error("Error updating food item: ", error);
       toast.error("Error updating food item.");
     } finally {
       setLoading(false);
+      setDeleteCategoryModalIsOpen(false);
     }
   };
+
+  const handleDeleteCategory = async () => {
+    setLoading(true);
+    if (!selectedCategory) return;
+    try {
+      await deleteCategory(selectedCategory);
+    } catch (error) {
+      console.error("Erro ao excluir categoria: ", error);
+      toast.error("Erro ao excluir categoria.");
+    } finally {
+      setLoading(false);
+      setDeleteCategoryModalIsOpen(false);
+      setFoodItems([])
+    }
+  };
+
   const handleAddedFood = async () => {
     setLoading(true);
-    if (!selectedFood || !selectedFood.id) {
-      const addedFood: Food = {
-        id: GenerateId(),
-        name: newFood.name,
-        portion: newFood.portion,
-        calories: Number(newFood.calories),
-      };
-      addFoodItem(selectedCategory, addedFood);
-      setModalIsOpen(false);
-    }
     try {
       const addedFood = {
         id: GenerateId(),
@@ -115,7 +160,7 @@ export const Database: React.FC = () => {
         portion: newFood.portion,
         calories: Number(newFood.calories),
       };
-      addFoodItem(selectedCategory, addedFood);
+      await addFoodItem(selectedCategory, addedFood);
       setModalIsOpen(false);
     } catch (error) {
       console.error("Error updating food item: ", error);
@@ -163,7 +208,7 @@ export const Database: React.FC = () => {
 
   useEffect(() => {
     const filteredData = foodItems.filter((item) => {
-      const name = item?.name || ""; // Garante que `name` nunca será undefined
+      const name = item?.name || "";
       return name.toLowerCase().includes(searchTerm.toLowerCase());
     });
 
@@ -173,6 +218,12 @@ export const Database: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewFood({ ...newFood, [e.target.name]: e.target.value });
   };
+  const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedCategoryItem(e.target.value);
+  };
+  const handleChangeNewCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewCategory(e.target.value);
+  };
 
   const handleBulkDelete = () => {
     setBulkDeleteModalIsOpen(true);
@@ -180,17 +231,22 @@ export const Database: React.FC = () => {
 
   const confirmBulkDelete = async () => {
     try {
-      await Promise.all(
-        selectedItems.map((id) => deleteFoodItem(selectedCategory, id))
-      );
+      setLoading(true);
+      for (let i = 0; i <= selectedItems.length; i++) {
+        await deleteFoodItem(selectedCategory, selectedItems[i]);
+      }
       setSelectedItems([]);
       setBulkDeleteModalIsOpen(false);
-      toast.success("Alimentos excluídos com sucesso!");
     } catch (error) {
       toast.error("Erro ao excluir alimentos.");
       console.error("Erro ao excluir alimentos:", error);
+    } finally {
+      setLoading(false);
     }
   };
+  useEffect(() => {
+    console.log("Food Items:", foodItems);
+  }, [foodItems]);
 
   return (
     <S.Container>
@@ -206,7 +262,23 @@ export const Database: React.FC = () => {
               </option>
             ))}
         </S.Select>
-
+        <S.IconsGroup>
+          <S.IconOperation
+            className="fa-solid fa-trash"
+            title="Remover categoria"
+            onClick={() => setDeleteCategoryModalIsOpen(true)}
+          ></S.IconOperation>
+          <S.IconOperation
+            className="fa-solid fa-pen-to-square"
+            title="Editar categoria"
+            onClick={() => setEditCategoryModalIsOpen(true)}
+          ></S.IconOperation>
+          <S.IconOperation
+            className="fa-solid fa-circle-plus"
+            title="Adicionar categoria"
+            onClick={() => setCategoryModalIsOpen(true)}
+          ></S.IconOperation>
+        </S.IconsGroup>
         <S.SearchInput>
           <S.Icon className="fa-solid fa-magnifying-glass"></S.Icon>
           <S.Input
@@ -240,46 +312,54 @@ export const Database: React.FC = () => {
             </S.Column>
           </S.Head>
           <S.Body>
-            {filteredFoodItems.map((foodItem, index) => (
-              <S.Line key={foodItem.id}>
-                <S.Value>
-                  <S.CheckBoxWrapper>
-                    <S.CheckBox
-                      checked={selectedItems.includes(foodItem.id)}
-                      onChange={() =>
-                        setSelectedItems((prev) =>
-                          prev.includes(foodItem.id)
-                            ? prev.filter((id) => id !== foodItem.id)
-                            : [...prev, foodItem.id]
-                        )
-                      }
-                    />
-                    <S.CheckBoxCustom />
-                  </S.CheckBoxWrapper>
-                </S.Value>
-                <S.Value>{foodItem.name}</S.Value>
-                <S.Value>{foodItem.portion}</S.Value>
-                <S.Value>{foodItem.calories}</S.Value>
-                <S.Actions>
-                  <S.IconDarked
-                    onClick={() => handleOptionsClick(index)}
-                    className="fa-solid fa-ellipsis-vertical"
-                  ></S.IconDarked>
-                  {optionsIsOpen === index && (
-                    <S.ModalOptions ref={optionsRef}>
-                      <S.TextBackground onClick={() => openEditModal(foodItem)}>
-                        <S.ButtonText>Editar</S.ButtonText>
-                      </S.TextBackground>
-                      <S.TextBackground
-                        onClick={() => openDeleteModal(foodItem)}
-                      >
-                        <S.ButtonText>Excluir</S.ButtonText>
-                      </S.TextBackground>
-                    </S.ModalOptions>
-                  )}
-                </S.Actions>
-              </S.Line>
-            ))}
+            {selectedCategory
+              ? filteredFoodItems.map((foodItem, index) =>
+                  foodItem ? (
+                    <S.Line key={index}>
+                      <S.Value>
+                        <S.CheckBoxWrapper>
+                          <S.CheckBox
+                            checked={selectedItems.includes(foodItem.id)}
+                            onChange={() =>
+                              setSelectedItems((prev) =>
+                                prev.includes(foodItem.id)
+                                  ? prev.filter((id) => id !== foodItem.id)
+                                  : [...prev, foodItem.id]
+                              )
+                            }
+                          />
+                          <S.CheckBoxCustom />
+                        </S.CheckBoxWrapper>
+                      </S.Value>
+                      <S.Value>{foodItem.name}</S.Value>
+                      <S.Value>{foodItem.portion}</S.Value>
+                      <S.Value>{foodItem.calories}</S.Value>
+                      <S.Actions>
+                        <S.IconDarked
+                          onClick={() => handleOptionsClick(index)}
+                          className="fa-solid fa-ellipsis-vertical"
+                        ></S.IconDarked>
+                        {optionsIsOpen === index && (
+                          <S.ModalOptions ref={optionsRef}>
+                            <S.TextBackground
+                              onClick={() => openEditModal(foodItem)}
+                            >
+                              <S.ButtonText>Editar</S.ButtonText>
+                            </S.TextBackground>
+                            <S.TextBackground
+                              onClick={() => openDeleteModal(foodItem)}
+                            >
+                              <S.ButtonText>Excluir</S.ButtonText>
+                            </S.TextBackground>
+                          </S.ModalOptions>
+                        )}
+                      </S.Actions>
+                    </S.Line>
+                  ) : (
+                    ""
+                  )
+                )
+              : ""}
           </S.Body>
         </S.Table>
       </S.TableContainer>
@@ -426,6 +506,110 @@ export const Database: React.FC = () => {
           </S.Wrapper>
         </S.Form>
       </Modal>
+      <Modal
+        isOpen={editCategoryModalIsOpen}
+        onRequestClose={() => setEditCategoryModalIsOpen(false)}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            zIndex: 999,
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            maxWidth: "400px",
+          },
+        }}
+      >
+        <S.ModalTitle>Editar Categoria</S.ModalTitle>
+        <S.Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleEditCategoy();
+          }}
+        >
+          <S.WrapperForm>
+            <S.Label>Nome do Categoria</S.Label>
+            <S.InputModal
+              type="text"
+              name="name"
+              placeholder="Digite o nome do categoria"
+              value={selectedCategoryItem}
+              onChange={handleChangeCategory}
+            />
+          </S.WrapperForm>
+          <S.Wrapper
+            style={{ gap: 22, marginTop: 22, justifyContent: "flex-end" }}
+          >
+            <S.ButtonCancel
+              type="button"
+              onClick={() => setEditCategoryModalIsOpen(false)}
+            >
+              Cancelar
+            </S.ButtonCancel>
+            <S.ButtonConfirm type="submit" disabled={loading}>
+              {loading ? <ClipLoader size={20} color="#FFF" /> : "Editar"}
+            </S.ButtonConfirm>
+          </S.Wrapper>
+        </S.Form>
+      </Modal>
+      <Modal
+        isOpen={categoyModalIsOpen}
+        onRequestClose={() => setCategoryModalIsOpen(false)}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            zIndex: 999,
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            maxWidth: "400px",
+          },
+        }}
+      >
+        <S.ModalTitle>Adicionar Categoria</S.ModalTitle>
+        <S.Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleAddCategoy();
+          }}
+        >
+          <S.WrapperForm>
+            <S.Label>Nome do Categoria</S.Label>
+            <S.InputModal
+              type="text"
+              name="name"
+              placeholder="Digite o nome do categoria"
+              value={newCategory}
+              onChange={handleChangeNewCategory}
+            />
+          </S.WrapperForm>
+          <S.Wrapper
+            style={{ gap: 22, marginTop: 22, justifyContent: "flex-end" }}
+          >
+            <S.ButtonCancel
+              type="button"
+              onClick={() => setCategoryModalIsOpen(false)}
+            >
+              Cancelar
+            </S.ButtonCancel>
+            <S.ButtonConfirm type="submit" disabled={loading}>
+              {loading ? <ClipLoader size={20} color="#FFF" /> : "Criar"}
+            </S.ButtonConfirm>
+          </S.Wrapper>
+        </S.Form>
+      </Modal>
 
       <Modal
         isOpen={deleteModalIsOpen}
@@ -466,6 +650,50 @@ export const Database: React.FC = () => {
             type="button"
             disabled={loading}
             onClick={() => handleDeleteFood()}
+          >
+            {loading ? <ClipLoader size={20} color="#FFF" /> : "Excluir"}
+          </S.ButtonConfirm>
+        </S.Wrapper>
+      </Modal>
+      <Modal
+        isOpen={deleteCategoryModalIsOpen}
+        onRequestClose={() => setDeleteCategoryModalIsOpen(false)}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            zIndex: 999,
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            maxWidth: "400px",
+          },
+        }}
+      >
+        <S.ModalTitle>Excluir Categoria</S.ModalTitle>
+        <S.WrapperForm>
+          <S.Label>
+            Tem certeza que deseja excluir a categoria {selectedCategory}?
+          </S.Label>
+        </S.WrapperForm>
+        <S.Wrapper
+          style={{ gap: 22, marginTop: 22, justifyContent: "flex-end" }}
+        >
+          <S.ButtonCancel
+            type="button"
+            onClick={() => setDeleteCategoryModalIsOpen(false)}
+          >
+            Cancelar
+          </S.ButtonCancel>
+          <S.ButtonConfirm
+            type="button"
+            disabled={loading}
+            onClick={() => handleDeleteCategory()}
           >
             {loading ? <ClipLoader size={20} color="#FFF" /> : "Excluir"}
           </S.ButtonConfirm>
