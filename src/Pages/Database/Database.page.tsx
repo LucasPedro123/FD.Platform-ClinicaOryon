@@ -25,7 +25,7 @@ export const Database: React.FC = () => {
     updateCategory,
     deleteCategory,
     addCategory,
-    setFoodItems
+    setFoodItems,
   } = useFoodContext();
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
@@ -147,7 +147,7 @@ export const Database: React.FC = () => {
     } finally {
       setLoading(false);
       setDeleteCategoryModalIsOpen(false);
-      setFoodItems([])
+      setFoodItems([]);
     }
   };
 
@@ -255,6 +255,9 @@ export const Database: React.FC = () => {
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
+          <option value="" disabled selected>
+            Selecione a categoria
+          </option>
           {categories &&
             categories.map((category, index) => (
               <option key={index} value={category}>
