@@ -232,7 +232,7 @@ export const Database: React.FC = () => {
   const confirmBulkDelete = async () => {
     try {
       setLoading(true);
-      for (let i = 0; i <= selectedItems.length; i++) {
+      for (let i = 0; i < selectedItems.length; i++) {
         await deleteFoodItem(selectedCategory, selectedItems[i]);
       }
       setSelectedItems([]);
