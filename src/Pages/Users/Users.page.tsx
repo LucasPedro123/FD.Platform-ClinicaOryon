@@ -30,6 +30,7 @@ export const Users: React.FC = () => {
   } = useUserContext();
   const [showModalUser, setShowModalUser] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [deleteUsersModal, setDeleteUsersModal] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [optionsIsOpen, setOptionsIsOpen] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,6 +39,7 @@ export const Users: React.FC = () => {
     { date: string; calories: number }[]
   >([]);
   const optionsRef = useRef<HTMLDivElement>(null);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -104,20 +106,51 @@ export const Users: React.FC = () => {
   };
 
   const formatDate = (dateString: string | undefined) => {
-    // Cria um objeto Date a partir da string ISO 8601
     if (dateString == undefined) {
       return;
     }
 
     const date = new Date(dateString);
 
-    // Extrai o dia, o mês e o ano
     const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Mês começa de 0, então adicionamos 1
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
 
-    // Retorna a data formatada no formato DD/MM/AAAA
     return `${day}/${month}/${year}`;
+  };
+
+  const handleMassDelete = async () => {
+    if (selectedUsers.length === 0) {
+      toast.warn("Nenhum usuário selecionado para exclusão.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const usersToDelete = users.filter((user) =>
+        selectedUsers.includes(user.userId)
+      );
+      for (let i = 0; i < usersToDelete.length; i++) {
+        await deleteUserAccount(usersToDelete[i]);
+      }
+
+      setSelectedUsers([]);
+      toast.success("Usuários excluídos com sucesso!");
+    } catch (error) {
+      console.error("Erro ao excluir usuários:", error);
+      toast.error("Erro ao excluir usuários.");
+    } finally {
+      setLoading(false);
+      setDeleteUsersModal(false);
+    }
+  };
+
+  const handleSelectUser = (userId: string) => {
+    setSelectedUsers((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
   };
 
   return (
@@ -142,6 +175,14 @@ export const Users: React.FC = () => {
         <S.Table>
           <S.Head>
             <S.Column>
+              <S.ColumnName>
+                {selectedUsers.length > 0 && (
+                  <S.IconTrash
+                    onClick={() => setDeleteUsersModal(true)}
+                    className="fa-solid fa-trash"
+                  ></S.IconTrash>
+                )}
+              </S.ColumnName>
               <S.ColumnName>Users</S.ColumnName>
               <S.ColumnName>Email</S.ColumnName>
               <S.ColumnName>Telefone</S.ColumnName>
@@ -153,6 +194,15 @@ export const Users: React.FC = () => {
           <S.Body>
             {filteredUsers.map((user, index: number) => (
               <S.Line key={user.userId}>
+                <S.Value>
+                  <S.CheckBoxWrapper>
+                    <S.CheckBox
+                      checked={selectedUsers.includes(user.userId)}
+                      onChange={() => handleSelectUser(user.userId)}
+                    />
+                    <S.CheckBoxCustom />
+                  </S.CheckBoxWrapper>
+                </S.Value>
                 <S.LineProfile>
                   {userImages[user.userId] ? (
                     <img
@@ -301,6 +351,43 @@ export const Users: React.FC = () => {
             </S.ButtonCancel>
           </S.ModalContent>
         )}
+      </Modal>
+      <Modal
+        isOpen={deleteUsersModal}
+        onRequestClose={() => setDeleteUsersModal(false)}
+        style={{
+          overlay: { backgroundColor: "rgba(0, 0, 0, 0.75)", zIndex: 999 },
+          content: {
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            height: "max-content",
+            maxWidth: "400px",
+          },
+        }}
+      >
+        <S.ModalTitle>Tem certeza?</S.ModalTitle>
+        <S.ModalText>
+          Você deseja excluir os {selectedUsers.length} usuários selecionados?
+        </S.ModalText>
+        <S.Wrapper
+          style={{ gap: 22, marginTop: 22, justifyContent: "flex-end" }}
+        >
+          <S.ButtonCancel
+            type="button"
+            onClick={() => setDeleteUsersModal(false)}
+          >
+            Cancelar
+          </S.ButtonCancel>
+          <S.ButtonConfirm
+            type="button"
+            disabled={loading}
+            onClick={() => handleMassDelete()}
+          >
+            {loading ? <ClipLoader size={20} color="#FFF" /> : "Excluir"}
+          </S.ButtonConfirm>
+        </S.Wrapper>
       </Modal>
     </S.UserContainer>
   );
