@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { STYLE_GUIDE } from "../../assets/Style/global";
-import CheckedIcon from "../../assets/check-icon.svg";
+import CheckedIcon from "../../assets/check-icon.svg?url";
 
 export const Container = styled.div`
   margin-top: 100px;
