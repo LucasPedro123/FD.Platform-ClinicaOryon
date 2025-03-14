@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { STYLE_GUIDE } from "../../assets/Style/global";
-import CheckedIcon from "../../assets/check-icon.svg";
 
 export const UserContainer = styled.div`
   width: 100%;
@@ -56,8 +55,6 @@ export const UserLength = styled.h1`
   color: #343434;
 `;
 
-
-
 export const LineProfile = styled.td`
   padding: 8px;
   display: flex;
@@ -71,8 +68,6 @@ export const LineProfile = styled.td`
     color: #323c47;
   }
 `;
-
-
 
 export const Divider = styled.div`
   width: 100%;
@@ -96,7 +91,6 @@ export const ModalUserWrapper = styled.div`
   gap: 20px;
 `;
 export const ModelUserName = styled.h3``;
-
 
 export const Container = styled.div`
   margin-top: 100px;
@@ -141,7 +135,6 @@ export const Line = styled.tr`
     background: #f9f9fb;
   }
 `;
-
 export const CheckBoxWrapper = styled.label`
   display: flex;
   align-items: center;
@@ -160,31 +153,25 @@ export const CheckBox = styled.input.attrs({ type: "checkbox" })`
     border-color: ${STYLE_GUIDE.color.secondary};
   }
 
-  &:checked + div::after {
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-image: url(${CheckedIcon});
-    background-repeat: none;
-    background-size: 100%;
-    background-position: center;
+  &:checked + div i {
     display: block;
-    color: white;
-    font-size: 14px;
-    text-align: center;
   }
 `;
 
 export const CheckBoxCustom = styled.div`
-  width: 18px;
-  height: 18px;
-  border: 2px solid ${STYLE_GUIDE.color.secondary};
-  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  transition: all 0.2s;
+  border-radius: 4px;
+
+  i {
+    color: white;
+    font-size: 14px;
+    display: none; 
+  }
 `;
 
 export const Value = styled.td`
@@ -390,15 +377,15 @@ export const WrapperCategoryInfo = styled.div`
 
 export const IconTrash = styled.i`
   color: ${STYLE_GUIDE.color.alert};
-  &:hover{
-    cursor: pointer; 
+  &:hover {
+    cursor: pointer;
   }
 `;
 export const IconDarked = styled.i`
   color: ${STYLE_GUIDE.color.dark};
   font-size: 20px;
-  &:hover{
-    cursor: pointer; 
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -414,4 +401,4 @@ export const Select = styled.select`
   @media (max-width: 768px) {
     width: 100%;
   }
-`
+`;

@@ -331,7 +331,9 @@ export const Database: React.FC = () => {
                               )
                             }
                           />
-                          <S.CheckBoxCustom />
+                          <S.CheckBoxCustom>
+                            <i className="fa-solid fa-check"></i>
+                          </S.CheckBoxCustom>
                         </S.CheckBoxWrapper>
                       </S.Value>
                       <S.Value>{foodItem.name}</S.Value>

@@ -196,11 +196,15 @@ export const Users: React.FC = () => {
               <S.Line key={user.userId}>
                 <S.Value>
                   <S.CheckBoxWrapper>
-                    <S.CheckBox
-                      checked={selectedUsers.includes(user.userId)}
-                      onChange={() => handleSelectUser(user.userId)}
-                    />
-                    <S.CheckBoxCustom />
+                    <S.CheckBoxWrapper>
+                      <S.CheckBox
+                        checked={selectedUsers.includes(user.userId)}
+                        onChange={() => handleSelectUser(user.userId)}
+                      />
+                      <S.CheckBoxCustom>
+                        <i className="fa-solid fa-check"></i>
+                      </S.CheckBoxCustom>
+                    </S.CheckBoxWrapper>
                   </S.CheckBoxWrapper>
                 </S.Value>
                 <S.LineProfile>

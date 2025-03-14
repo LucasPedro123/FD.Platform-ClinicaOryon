@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { STYLE_GUIDE } from "../../assets/Style/global";
-import CheckedIcon from "../../assets/check-icon.svg?url";
 
 export const Container = styled.div`
   margin-top: 100px;
@@ -45,7 +44,6 @@ export const Line = styled.tr`
     background: #f9f9fb;
   }
 `;
-
 export const CheckBoxWrapper = styled.label`
   display: flex;
   align-items: center;
@@ -60,35 +58,29 @@ export const CheckBox = styled.input.attrs({ type: "checkbox" })`
   position: absolute;
 
   &:checked + div {
-    background-color: ${STYLE_GUIDE.color.secondary};
+    background-color: ${STYLE_GUIDE.color.secondary}; 
     border-color: ${STYLE_GUIDE.color.secondary};
   }
 
-  &:checked + div::after {
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-image: url(${CheckedIcon});
-    background-repeat: none;
-    background-size: 100%;
-    background-position: center;
-    display: block;
-    color: ${STYLE_GUIDE.color.white};
-    font-size: 14px;
-    text-align: center;
+  &:checked + div i {
+    display: block; 
   }
 `;
 
 export const CheckBoxCustom = styled.div`
-  width: 18px;
-  height: 18px;
-  border: 2px solid ${STYLE_GUIDE.color.secondary};
-  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  transition: all 0.2s;
+  border-radius: 4px;
+
+  i {
+    color: white;
+    font-size: 14px;
+    display: none;
+  }
 `;
 
 export const Value = styled.td`
@@ -325,8 +317,7 @@ export const Select = styled.select`
   }
 `;
 
-
 export const IconsGroup = styled.div`
   display: flex;
   gap: 14px;
-`
+`;
